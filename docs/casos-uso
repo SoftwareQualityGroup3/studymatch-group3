@@ -1,0 +1,61 @@
+# Caso de Uso: Perfil Académico e de Competências
+
+## Nome e Objetivo
+
+**Nome:** Consultar Perfil Académico e de Competências
+
+**Objetivo:** Permitir que um estudante (ou outro ator autorizado) visualize uma representação estruturada e compreensível do percurso académico e das competências acumuladas por um estudante, servindo de base para a futura formação de grupos.
+
+## Ator(es) Primário(s)
+
+- **Estudante** — consulta o seu próprio perfil.
+- **Docente / Responsável de curso** *(ator secundário, se aplicável)* — pode consultar perfis de estudantes inscritos numa unidade curricular ou atividade, com permissões restritas.
+
+## Cenário de Sucesso Principal
+
+1. O estudante autentica-se na plataforma StudyMatch.
+2. O estudante acede à secção "O meu Perfil".
+3. O sistema recolhe as evidências associadas ao estudante:
+   - unidades curriculares concluídas e respetiva classificação;
+   - competências associadas a essas unidades curriculares;
+   - evidências adicionais (ex: participação em atividades extracurriculares, projetos, autoavaliação de competências).
+4. O sistema calcula/agrega o nível de cada competência com base nas evidências disponíveis.
+5. O sistema apresenta o perfil estruturado em três blocos:
+   - **Identidade e contexto académico** (nome, curso, ano, unidades curriculares em curso);
+   - **Trajetória académica** (histórico de unidades curriculares e classificações);
+   - **Perfil de competências** (lista de competências com nível/indicador de confiança).
+6. O estudante visualiza o perfil apresentado.
+
+## Fluxos Alternativos / Exceção
+
+**A1 — Estudante com pouco ou nenhum histórico (cold start)**
+No passo 3, se não existirem evidências suficientes (ex: estudante no 1º semestre), o sistema:
+- apresenta o perfil com um indicador claro de "perfil em construção";
+- sugere fontes alternativas de evidência (ex: preenchimento de um questionário inicial de autoavaliação, importação de experiência prévia);
+- não atribui níveis de competência com base em dados insuficientes, evitando inferências não fundamentadas.
+
+**A2 — Evidências conflituosas ou desatualizadas**
+Se existirem evidências contraditórias (ex: reavaliação de uma unidade curricular), o sistema utiliza a evidência mais recente e regista a substituição, sem eliminar o histórico anterior.
+
+**E1 — Ator sem permissão**
+Se um ator tentar consultar o perfil de um estudante sem autorização (ex: outro estudante sem relação com um grupo/atividade comum), o sistema nega o acesso e regista a tentativa.
+
+**E2 — Falha ao obter dados**
+Se o sistema não conseguir obter dados de uma fonte (ex: serviço de classificações indisponível), apresenta o perfil com os dados disponíveis e um aviso de que a informação pode estar incompleta.
+
+## Regras de Negócio
+
+- Um perfil só apresenta competências que tenham pelo menos uma evidência associada (não são atribuídos níveis "por defeito").
+- O nível de confiança de uma competência aumenta com o número e a diversidade de evidências que a sustentam (ex: mais de uma unidade curricular a contribuir para a mesma competência).
+- Apenas o próprio estudante tem acesso total ao seu perfil; outros atores têm acesso limitado ao contexto relevante (ex: apenas às competências relevantes para uma atividade específica).
+- Alterações no histórico académico (ex: nova classificação) devem refletir-se automaticamente no perfil, sem intervenção manual do estudante.
+
+## Conceitos de Domínio Revelados
+
+- **Estudante** — identidade e contexto académico.
+- **Unidade Curricular** — associada a competências e a classificações.
+- **Evidência** — qualquer registo (académico ou não) que contribui para o perfil (ex: classificação, autoavaliação, participação em atividade).
+- **Competência** — conceito avaliável, associado a uma ou mais unidades curriculares/evidências.
+- **Nível de Competência** — valor ou indicador calculado a partir das evidências associadas.
+- **Perfil** — agregação estruturada de trajetória académica + competências de um estudante.
+- **Grau de Confiança** — indicador da robustez da evidência que sustenta uma competência (relevante em cenários de cold start).
