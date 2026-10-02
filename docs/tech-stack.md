@@ -7,7 +7,7 @@
 
 | Camada | Tecnologia Validada |
 | --- | --- |
-| Frontend *(a criar)* | React + Vite (JavaScript) |
+| Frontend | React + Vite (JavaScript) |
 | Backend | Java 21 (LTS) + Spring Boot 4.x · API REST/JSON em `/api` (Controller → Service → Repository) |
 | Persistência | MySQL 8.4 LTS + Spring Data JPA + Flyway |
 | Build | Maven com Maven Wrapper (backend) · npm (frontend) |
