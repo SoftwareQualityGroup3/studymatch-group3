@@ -120,7 +120,7 @@ studymatch/
 │       └── main/java/com/studymatch/backend/
 ├── docs/
 │   ├── coding-conventions.md
-│   ├── use-cases.md
+│   ├── use-cases/
 │   ├── domain-model.md
 │   └── architecture.md
 ├── .editorconfig
