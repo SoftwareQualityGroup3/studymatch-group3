@@ -148,8 +148,6 @@ A estratégia de testes do backend é composta por:
 
 ### Frontend
 
-*(a implementar com a criação do frontend)*
-
 A estratégia de testes do frontend é composta por:
 
 - **Vitest:** Test runner rápido e nativo do ecossistema Vite;
