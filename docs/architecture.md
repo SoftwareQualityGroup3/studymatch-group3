@@ -12,13 +12,13 @@ Esta arquitetura procura garantir uma separação clara de responsabilidades e p
 
 ```mermaid
 flowchart TD
-    A[React SPA - frontend/] -->|REST / JSON - /api| B[Controller]
-    B --> C[Service]
-    C --> D[Repository]
-    D --> E[(MySQL)]
+    A[React SPA - frontend] -->|REST / JSON - /api| B[Controller]
+B --> C[Service]
+C --> D[Repository]
+D --> E[(MySQL)]
 
-    C -. estratégia substituível .-> F[[Cold Start Strategy]]
-    C -. estratégia substituível .-> G[[Matching Strategy]]
+C -. estratégia substituível .-> F[[Cold Start Strategy]]
+C -. estratégia substituível .-> G[[Matching Strategy]]
 ```
 
 ## Componentes e Responsabilidades
@@ -142,7 +142,7 @@ As respostas de erro devem seguir um formato JSON consistente, por exemplo:
 
 A persistência é realizada utilizando:
 
-- MySQL como sistema de gestão de base de dados;
+- MySQL 8.4 LTS como sistema de gestão de base de dados;
 - Spring Data JPA para acesso aos dados;
 - Hibernate como implementação ORM;
 - Flyway para controlo e versionamento das alterações ao esquema da base de dados.
@@ -153,11 +153,7 @@ As migrações Flyway devem ser colocadas em:
 backend/src/main/resources/db/migration/
 ```
 
-O MySQL deverá poder ser executado através de Docker utilizando:
-
-```text
-docker-compose.yml
-```
+Durante o desenvolvimento e os testes de persistência será utilizada uma instância local de MySQL 8.4 LTS, conforme definido na stack tecnológica do projeto.
 
 ## Pontos de Extensão
 
