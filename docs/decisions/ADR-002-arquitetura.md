@@ -19,7 +19,7 @@ O sistema necessita de integrar:
 A stack tecnológica já definida pela equipa inclui:
 
 - React + Vite para o frontend;
-- Java 21 + Spring Boot 3.x para o backend;
+- Java 21 + Spring Boot 4.x (4.1.1) para o backend;
 - API REST/JSON;
 - MySQL 8.4 LTS;
 - Spring Data JPA / Hibernate;
