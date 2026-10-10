@@ -62,14 +62,12 @@ Aplicam-se a alterações em `backend/` e `frontend/`.
 - [ ] Cumpre as convenções de código e nomenclatura de `docs/coding-conventions.md` (identificadores em inglês, formato das migrações `V<n>__descricao_curta.sql`, etc.).
 - [ ] Respeita a arquitetura em camadas `Controller → Service → Repository`: os Controllers não acedem diretamente a Repositories nem contêm regras de negócio, e os DTOs são usados na fronteira da API.
 - [ ] As alterações ao esquema da base de dados são feitas por migrações Flyway, e nunca pelo Hibernate (`ddl-auto=validate`).
-- [ ] A formatação respeita o `.editorConfig`.
+- [ ] A formatação respeita o `.editorconfig`.
 
 ### Limpeza e segurança
 
 - [ ] Não há segredos commitados: as credenciais são lidas de variáveis de ambiente (ex.: `DB_USER`, `DB_PASSWORD`) e o `.env` não é versionado.
 - [ ] Não há `console.log`, prints de debug nem código comentado esquecido.
-
-> O frontend ainda não existe no repositório. Os critérios de `npm` aplicam-se a partir do momento em que a pasta `frontend/` for criada.
 
 ---
 
