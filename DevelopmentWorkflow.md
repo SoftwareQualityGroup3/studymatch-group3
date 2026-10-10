@@ -48,7 +48,7 @@ Issue → Branch → Implementação → Pull Request → Review → Merge
 
 1. Criar/atribuir a Issue no GitHub Project board.
 2. Criar a branch a partir da `main`, seguindo a convenção acima.
-3. Desenvolver com commits claros, referenciando a Issue (ex: `refs #12`).
+3. Desenvolver com commits no formato `<tipo>: <descrição> (#12)`, conforme `docs/coding-conventions.md`.
 4. Abrir Pull Request para `main`, referenciando a Issue (`closes #12`).
 5. Pelo menos um membro da equipa (diferente do autor) faz a review.
 6. Após aprovação, merge e eliminação da branch.
