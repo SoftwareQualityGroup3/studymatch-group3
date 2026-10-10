@@ -10,7 +10,8 @@ Issue → Branch → Implementação → Pull Request → Review → Merge
 
 Todo o trabalho relevante deve estar associado a uma Issue. Desenvolvimento direto na `main` não é permitido.
 
-A branch criada para cada Issue deve seguir a convenção de nomenclatura definida em [#5 — Documentar convenção de branching](https://github.com/SoftwareQualityGroup3/studymatch-group3/issues/5)
+A branch criada para cada Issue deve seguir a convenção definida em [`DevelopmentWorkflow.md`](DevelopmentWorkflow.md).
+
 ## Regras de Pull Request
 
 - Título claro e descritivo do que foi feito.
