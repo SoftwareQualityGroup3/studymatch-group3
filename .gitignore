@@ -35,3 +35,12 @@ backend/target/
 
 !.mvn/wrapper/maven-wrapper.jar
 !backend/.mvn/wrapper/maven-wrapper.jar
+
+# Node / frontend
+node_modules/
+frontend/dist/
+*.local
+npm-debug.log*
+
+# VS Code
+.vscode/
