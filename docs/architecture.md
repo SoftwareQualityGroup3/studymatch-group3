@@ -83,7 +83,7 @@ A utilização de DTOs evita expor diretamente as entidades internas através da
 
 ### Config
 
-O pacote `config` contém configurações transversais da aplicação, como configuração de CORS e Beans do Spring.
+O pacote `config` contém configurações transversais da aplicação, como Beans do Spring.
 
 ## Regras de Dependência
 
@@ -118,24 +118,13 @@ Por exemplo:
 
 ```text
 GET /api/students
-GET /api/status
+GET /api/health
 ```
 
-Em desenvolvimento, o Vite pode utilizar um proxy de `/api` para:
+Em desenvolvimento, o Vite utiliza um proxy de `/api` para:
 
 ```text
 http://localhost:8080
-```
-
-Alternativamente, o backend poderá configurar CORS no pacote `config`.
-
-As respostas de erro devem seguir um formato JSON consistente, por exemplo:
-
-```json
-{
-  "error": "Estudante não encontrado",
-  "status": 404
-}
 ```
 
 ## Persistência
