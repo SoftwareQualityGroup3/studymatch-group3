@@ -27,8 +27,6 @@ As escolhas da stack assentam nos seguintes critérios de avaliação:
 
 ### 2.1 Frontend — React + Vite (JavaScript)
 
-> **Estado:** ainda não criado no repositório. As decisões abaixo servem de referência para a sua criação (pasta `frontend/`).
-
 | Critério | Justificação |
 | --- | --- |
 | Adequação | React é adequado para gerir o estado reativo da aplicação (perfis, pesquisa, disponibilidades e pedidos de *match*). A utilização de componentes facilita a organização da interface. |
@@ -79,7 +77,7 @@ O backend usa o `spring-boot-starter-parent` na versão **4.1.1** e as seguintes
 | --- | --- |
 | Adequação | Maven foi o ecossistema de build escolhido para o backend. O Maven Wrapper (`./mvnw`) garante que todos utilizem a mesma versão do Maven (atualmente 3.9.16, definida em `.mvn/wrapper/maven-wrapper.properties`). O `npm` é essencial no frontend para gerir pacotes e executar scripts. |
 | Manutenibilidade | Maven fornece uma estrutura convencional para gerir dependências (`pom.xml`), plugins, compilação e testes no backend. O `package.json` gere o equivalente no frontend. |
-| Testabilidade | `./mvnw test` executa os testes do backend. No frontend, os scripts do `package.json` executam o Vitest via `npm test`. |
+| Testabilidade | `./mvnw test` executa os testes do backend. No frontend, `npm test` executa o Vitest. |
 | Integração | O Maven integra-se com Spring Boot através do `spring-boot-maven-plugin`. O `npm` instala o React, Vite, Vitest e restantes módulos de JavaScript. |
 | Conhecimento da equipa | Validado e aceite por toda a equipa. |
 | Tooling | O Maven Wrapper evita discrepâncias entre ambientes. Maven e npm possuem suporte universal em IDEs e pipelines. |
@@ -127,10 +125,10 @@ spring.flyway.enabled=true
 | Spring Boot | **4.1.1** (`spring-boot-starter-parent`) |
 | MySQL | **8.4 LTS** |
 | Maven | 3.9.16 (via Maven Wrapper `./mvnw`) |
-| Node.js | Versão LTS *(frontend, a criar)* |
-| React | A fixar no `package.json` *(frontend, a criar)* |
-| Vite | A fixar no `package.json` *(frontend, a criar)* |
-| Vitest | A fixar no `package.json` *(frontend, a criar)* |
+| Node.js | Versão LTS |
+| React | 19 (versão fixada em `frontend/package.json`) |
+| Vite | 8 (versão fixada em `frontend/package.json`) |
+| Vitest | 5 (versão fixada em `frontend/package.json`) |
 
 ## 6. Estratégia de Testes
 
