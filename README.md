@@ -81,7 +81,7 @@ O fluxo de trabalho é **Issue → Branch → Pull Request → Review → Merge*
 - Cada PR resolve uma Issue (`Closes #N`), tem pelo menos **1 aprovação** de quem não é o autor, e todos os comentários resolvidos antes do merge.
 - O merge faz-se com **Squash and merge** e a branch é apagada depois.
 - Regras completas: [`CONTRIBUTING.md`](CONTRIBUTING.md). Convenção de branches: [`DevelopmentWorkflow.md`](DevelopmentWorkflow.md).
-- Planeamento e tarefas: [GitHub Project board](https://github.com/orgs/SoftwareQualityGroup3/projects) *(substituir pela ligação exata do board "StudyMatch Sprint 1")*
+- Planeamento e tarefas: [https://github.com/orgs/SoftwareQualityGroup3/projects/2](https://github.com/orgs/SoftwareQualityGroup3/projects) 
 
 ## Como executar
 
