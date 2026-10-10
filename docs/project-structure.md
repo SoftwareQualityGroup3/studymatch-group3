@@ -35,7 +35,6 @@ A estrutura acordada para o projeto prevê também a criação de:
 ```text
 studymatch-group3/
 ├── frontend/
-└── docker-compose.yml
 ```
 
 Nem todas as pastas ou ficheiros definidos na estrutura acordada têm de existir desde o início do projeto. Alguns serão criados à medida que o esqueleto técnico e as funcionalidades forem implementados.
@@ -78,14 +77,6 @@ docs/
 - `coding-conventions.md` — convenções de código e nomenclatura;
 - `project-structure.md` — descrição da estrutura de pastas e pacotes;
 - `tech-stack.md` — stack tecnológica adotada pelo projeto.
-
-### `docker-compose.yml`
-
-O ficheiro `docker-compose.yml` está previsto na estrutura acordada para o projeto, embora ainda não faça parte da estrutura atual do repositório.
-
-A configuração aprovada atualmente para desenvolvimento e testes de persistência utiliza uma instância local de MySQL 8.4 LTS.
-
-A eventual utilização futura de Docker deverá permanecer alinhada com as decisões tecnológicas e arquiteturais da equipa.
 
 ### `CONTRIBUTING.md`
 

@@ -18,7 +18,7 @@ Controller → Service → Repository
 
 Sem uma convenção comum, diferentes membros poderiam organizar funcionalidades semelhantes em locais distintos, tornando o projeto mais difícil de compreender, manter, testar e rever.
 
-A estrutura deve indicar de forma clara onde ficam:
+A estrutura deve indicar de forma clara     onde ficam:
 
 - o backend;
 - o frontend;
@@ -48,7 +48,6 @@ studymatch-group3/
 ├── backend/
 ├── frontend/
 ├── docs/
-├── docker-compose.yml
 ├── .gitignore
 ├── CONTRIBUTING.md
 └── DevelopmentWorkflow.md
@@ -179,14 +178,12 @@ backend/src/main/resources/db/migration/
 
 A persistência utiliza:
 
-- MySQL 8.4 LTS;
+- MySQL 8.4 LTS instalado localmente;
 - Spring Data JPA;
 - Hibernate;
 - Flyway.
 
 A configuração atualmente definida para desenvolvimento e testes de persistência utiliza uma instância local de MySQL 8.4 LTS.
-
-O ficheiro `docker-compose.yml` permanece previsto na estrutura do repositório conforme definido na Issue #25, podendo ser utilizado para serviços que venham a necessitar de execução através de containers.
 
 ---
 
