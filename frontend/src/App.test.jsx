@@ -26,21 +26,23 @@ describe('App', () => {
 
     expect(
       screen.getByRole('heading', { name: /studymatch/i })
-    ).toBeInTheDocument()
+    ).toBeTruthy()
   })
 
   it('apresenta o estado da aplicação e da base de dados', async () => {
     render(<App />)
 
-    expect(screen.getByText('A carregar...')).toBeInTheDocument()
+    expect(
+      screen.getByText('A carregar...')
+    ).toBeTruthy()
 
     expect(
       await screen.findByText('Aplicação: UP')
-    ).toBeInTheDocument()
+    ).toBeTruthy()
 
     expect(
       screen.getByText('Base de dados: UP')
-    ).toBeInTheDocument()
+    ).toBeTruthy()
   })
 
   it('apresenta uma mensagem de erro quando o backend está indisponível', async () => {
@@ -54,6 +56,6 @@ describe('App', () => {
       await screen.findByText(
         'Não foi possível obter o estado da aplicação.'
       )
-    ).toBeInTheDocument()
+    ).toBeTruthy()
   })
 })
