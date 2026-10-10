@@ -17,9 +17,9 @@ Closes #N
 ## Checklist
 
 - [ ] Título da PR é claro e a PR é pequena e focada num único objetivo
-- [ ] Código segue as convenções acordadas (`convencoes-codigo.md`)
+- [ ] Código segue as convenções acordadas (`docs/coding-conventions.md`)
 - [ ] Testes novos/atualizados e a passar (JUnit5/Mockito no backend, Vitest/RTL no frontend)
 - [ ] Sem `console.log` / prints de debug esquecidos
-- [ ] README/documentação atualizados, se aplicável
-- [ ] Cumpre a Definition of Done da sprint
+- [ ] Documentação atualizada, se aplicável
+- [ ] Cumpre a Definition of Done (`docs/definition-of-done.md`)
 - [ ] Não me autoaprovo — revisor pedido segue a rotação (Guilherme → João → Alexandre → Ricardo → Guilherme)
