@@ -12,7 +12,7 @@ Este documento define as convenções básicas de código, nomenclatura e commit
 
 | Elemento | Convenção | Exemplo |
 |---|---|---|
-| Pacotes | minúsculas, sem underscores | `com.studymatch.backend.student` |
+| Pacotes | minúsculas, sem underscores | `pt.studymatch.service` |
 | Classes / Interfaces | `PascalCase` | `StudentProfile`, `CompetencyService` |
 | Métodos | `camelCase` | `getStudentProfile()`, `calculateCompetencyLevel()` |
 | Variáveis | `camelCase` | `studentId`, `competencyList` |
@@ -51,7 +51,7 @@ Este documento define as convenções básicas de código, nomenclatura e commit
   course_unit
   competency_level
   ```
-- Tabelas no singular ou plural — **a decidir e manter consistente** (sugestão: singular, ex: `student`, `course_unit`).
+- Tabelas no **singular** (ex: `student`, `course_unit`, `app_status`).
 - Chaves estrangeiras com sufixo `_id` (ex: `student_id`, `course_unit_id`).
 - **Migrações** com o formato:
   ```
@@ -59,9 +59,9 @@ Este documento define as convenções básicas de código, nomenclatura e commit
   ```
   Exemplos:
   ```
-  V1__create_student_table.sql
-  V2__create_competency_table.sql
-  V3__add_index_student_email.sql
+  V1__init.sql
+  V2__create_student_table.sql
+  V3__create_competency_table.sql
   ```
   O número `<n>` é sequencial e nunca reutilizado, mesmo que uma migração seja posteriormente corrigida (cria-se uma nova migração).
 
@@ -92,7 +92,7 @@ fix: corrige validação de email no registo (#31)
 docs: documenta convenção de branches (#8)
 refactor: extrai lógica de cálculo de competências (#15)
 test: adiciona testes unitários ao StudentService (#19)
-chore: configura eslint no frontend (#24)
+chore: remove ficheiros do template do frontend (#24)
 ```
 
 **Regras:**
@@ -103,31 +103,14 @@ chore: configura eslint no frontend (#24)
 
 ## 7. Formatação Geral
 
-- Indentação e fim de linha definidos em `.editorconfig` (ver ficheiro na raiz do repositório).
+- Indentação e fim de linha definidos em `.editorconfig` (ver ficheiro `.editorconfig` na raiz do repositório).
 - Sem linhas de código comentadas deixadas no código final (remover antes do merge).
 - Ficheiros terminam com uma linha em branco.
 - Sem trailing whitespace.
 
 ## 8. Estrutura de Pastas (referência)
 
-```
-studymatch/
-├── frontend/
-│   └── src/
-│       └── components/
-├── backend/
-│   └── src/
-│       └── main/java/com/studymatch/backend/
-├── docs/
-│   ├── coding-conventions.md
-│   ├── use-cases/
-│   ├── domain-model.md
-│   └── architecture.md
-├── .editorconfig
-├── .gitignore
-├── README.md
-└── CONTRIBUTING.md
-```
+Ver `docs/project-structure.md`.
 
 ---
 

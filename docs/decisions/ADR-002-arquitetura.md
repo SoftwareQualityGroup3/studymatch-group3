@@ -57,7 +57,7 @@ As responsabilidades gerais serão distribuídas da seguinte forma:
 - **Repository** — realiza o acesso e persistência dos dados através de Spring Data JPA.
 - **Domain** — contém as entidades e conceitos centrais do domínio da aplicação.
 - **DTO** — representa os dados trocados através da API, evitando expor diretamente o modelo interno.
-- **Config** — contém configurações transversais da aplicação, como CORS e Beans do Spring.
+- **Config** — contém configurações transversais da aplicação, como Beans do Spring.
 
 O fluxo de dependências deverá respeitar o sentido:
 
