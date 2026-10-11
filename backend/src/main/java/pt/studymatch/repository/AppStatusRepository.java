@@ -1,23 +1,9 @@
 package pt.studymatch.repository;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import pt.studymatch.domain.AppStatus;
 
-@Repository
-public class AppStatusRepository {
+public interface AppStatusRepository extends JpaRepository<AppStatus, Integer> {
 
-    private final JdbcTemplate jdbcTemplate;
-
-    public AppStatusRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
-
-    public boolean isDatabaseUp() {
-        Integer numberOfRows = jdbcTemplate.queryForObject(
-                "SELECT COUNT(*) FROM app_status WHERE status = 'UP'",
-                Integer.class
-        );
-
-        return numberOfRows != null && numberOfRows > 0;
-    }
+    boolean existsByStatus(String status);
 }

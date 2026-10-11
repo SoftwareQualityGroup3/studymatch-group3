@@ -8,6 +8,9 @@ import pt.studymatch.repository.AppStatusRepository;
 @Service
 public class HealthService {
 
+    private static final String STATUS_UP = "UP";
+    private static final String STATUS_DOWN = "DOWN";
+
     private final AppStatusRepository appStatusRepository;
 
     public HealthService(AppStatusRepository appStatusRepository) {
@@ -16,15 +19,13 @@ public class HealthService {
 
     public HealthResponse getHealth() {
         try {
-            boolean databaseIsUp = appStatusRepository.isDatabaseUp();
-
-            if (databaseIsUp) {
-                return new HealthResponse("UP", "UP");
+            if (appStatusRepository.existsByStatus(STATUS_UP)) {
+                return new HealthResponse(STATUS_UP, STATUS_UP);
             }
 
-            return new HealthResponse("DOWN", "DOWN");
+            return new HealthResponse(STATUS_DOWN, STATUS_DOWN);
         } catch (DataAccessException exception) {
-            return new HealthResponse("DOWN", "DOWN");
+            return new HealthResponse(STATUS_DOWN, STATUS_DOWN);
         }
     }
 }
