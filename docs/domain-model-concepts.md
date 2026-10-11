@@ -489,3 +489,104 @@ Com este documento, o teu colega pode então continuar com:
 - as cardinalidades;
 - as restrições do domínio;
 - e a construção do diagrama UML final.
+
+---
+
+## 6. Relações e Cardinalidades
+
+Notação: `1` = exatamente um · `0..1` = zero ou um · `0..*` = zero ou mais · `1..*` = um ou mais.
+
+### 6.1 Identidade e contexto académico
+
+| Relação | Cardinalidade | Notas |
+|---------|---------------|-------|
+| Estudante — Identificador Institucional | 1 — 1 | O identificador identifica o estudante dentro da instituição. |
+| Estudante — Contexto de Curso | 1 — 1..* | Os contextos anteriores ficam como histórico. |
+| Contexto de Curso — Curso | * — 1 | Cada contexto refere um único curso. |
+| Contexto de Curso — Plano de Estudos | * — 1 | Cada contexto refere um único plano de estudos. |
+| Contexto de Curso — Ano Curricular | * — 1 | Ano curricular do estudante nesse contexto. |
+| Curso — Plano de Estudos | 1 — 1..* | Um curso pode ter várias versões do plano de estudos. |
+| Plano de Estudos — Ano Curricular | 1 — 1..* | O ano curricular refere o plano a que pertence. |
+| Plano de Estudos — Unidade Curricular | * — * | Uma UC pode pertencer a vários planos; um plano agrega várias UC. |
+
+### 6.2 Trajetória académica
+
+| Relação | Cardinalidade | Notas |
+|---------|---------------|-------|
+| Estudante — Trajetória Académica | 1 — 1 | Existe sempre, mesmo sem histórico. |
+| Trajetória Académica — Inscrição | 1 — 0..* | Organizadas cronologicamente por ano letivo. |
+| Inscrição — Unidade Curricular | * — 1 | Uma inscrição refere uma única UC num único ano letivo. |
+| Inscrição — Tentativa | 1 — 0..* | Várias tentativas (épocas de avaliação) por inscrição. |
+| Tentativa — Classificação | 1 — 0..1 | Uma tentativa em curso ainda não tem classificação. |
+| Tentativa — Estado de Conclusão | * — 1 | Aprovado, reprovado ou em curso. |
+| Unidade Curricular — Atividade | 1 — 0..* | Projeto, trabalho ou laboratório dentro da UC. |
+
+### 6.3 Competências, evidências e perfil
+
+| Relação | Cardinalidade | Notas |
+|---------|---------------|-------|
+| Competência — Categoria de Competência | * — 0..1 | A categoria é opcional. |
+| Unidade Curricular — Competência | * — * | O peso de contribuição é relativo a cada associação UC–competência. |
+| Estudante — Perfil do Estudante | 1 — 1 | Existe sempre, mesmo em cold start. |
+| Perfil do Estudante — Estado do Perfil | 1 — 1 | Em construção, parcial ou completo. |
+| Perfil do Estudante — Competência | * — * | Relação derivada: a competência só aparece no perfil se tiver pelo menos uma evidência. |
+| Estudante — Evidência | 1 — 0..* | Toda a evidência pertence a um estudante. |
+| Evidência — Competência | * — 1..* | Uma evidência sustenta pelo menos uma competência e pode sustentar várias. |
+| Evidência Curricular — Unidade Curricular | * — 1 | A evidência curricular deriva de uma UC. |
+| Autoavaliação — Estudante | * — 1 | Submetida pelo próprio estudante. |
+| Autoavaliação — Competência | * — 1 | Refere uma competência existente. |
+
+Especializações:
+- Evidência é generalização de Evidência Curricular e de Evidência Não Curricular.
+- Autoavaliação é uma especialização de Evidência Não Curricular.
+
+### 6.4 Contexto de agrupamento
+
+| Relação | Cardinalidade | Notas |
+|---------|---------------|-------|
+| Contexto de Agrupamento — Unidade Curricular | * — 1 | Obrigatório. |
+| Contexto de Agrupamento — Atividade | * — 0..1 | Opcional; a atividade pertence à mesma UC do contexto. |
+| Contexto de Agrupamento — Tamanho Alvo | 1 — 1 | Obrigatório. |
+| Contexto de Agrupamento — Restrição de Agrupamento | 1 — 0..* | As restrições são opcionais. |
+
+---
+
+## 7. Restrições de Domínio
+
+### 7.1 Identidade e contexto de curso
+
+- O identificador institucional é único.
+- Um estudante tem de estar associado a, pelo menos, um curso e a um plano de estudos.
+- A ausência de histórico académico não impede o registo do estudante.
+- Um estudante tem, em cada momento, no máximo um contexto de curso ativo por curso.
+- Uma atualização nunca elimina o contexto de curso anterior.
+- A informação necessária para o perfil e para a formação de grupos deve poder ser reconstruída para qualquer momento do percurso académico.
+
+### 7.2 Trajetória académica
+
+- Cada tentativa é um registo distinto e imutável; uma nova tentativa nunca apaga nem substitui uma anterior.
+- Todas as tentativas de uma UC permanecem no histórico, mesmo depois de uma aprovação.
+- Uma UC pode ter zero, uma ou várias tentativas ao longo de diferentes anos letivos.
+- O estado de conclusão de uma UC é determinado pela tentativa mais recente com aprovação, se existir.
+- O estado atual da UC e a progressão no curso são determinados a partir do histórico.
+- A trajetória é organizada cronologicamente por ano letivo.
+- Alterações de ano letivo ou de plano de estudos não eliminam informação histórica.
+
+### 7.3 Competências, evidências e perfil
+
+- Uma competência só é relevante para o perfil quando tem pelo menos uma evidência associada.
+- Nunca se atribui nível a uma competência sem evidência; com evidência insuficiente o nível pode ficar indefinido.
+- Uma UC pode contribuir para várias competências e uma competência pode ser alimentada por várias UC.
+- Uma evidência pode estar associada a mais do que uma competência, quando justificável.
+- Evidências não curriculares têm, por defeito, menor peso do que as curriculares, salvo validação explícita.
+- A autoavaliação é opcional, só incide sobre competências existentes, tem menor peso do que qualquer evidência curricular ou validada e nunca a substitui.
+- Nenhuma evidência anterior é eliminada quando surgem novas evidências.
+- O estado do perfil é visível para quem consulta o perfil.
+
+### 7.4 Contexto de agrupamento
+
+- Um contexto de agrupamento está associado a uma UC e, quando aplicável, a uma atividade dessa UC.
+- O tamanho alvo é obrigatório; as restantes restrições são opcionais.
+- Um contexto só pode ser editado enquanto estiver no estado "aberto".
+- Depois de utilizado para a formação de grupos, o contexto passa a ser apenas consultável.
+- O contexto não inclui nem executa qualquer algoritmo de formação de grupos.
