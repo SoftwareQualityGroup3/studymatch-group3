@@ -1,22 +1,40 @@
 package pt.studymatch.domain;
 
-import java.util.EnumMap;
+import jakarta.persistence.*;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.Map;
 
 /**
  * Unidade curricular, com o peso que cada competência tem nela.
- * Um peso vai de 0 (não contribui) a 1 (contribuição máxima).
+ * Um peso vai de 0 (não contribui) a 1 (contribuição máxima.
  */
+@Entity
+@Table(name = "course_unit")
 public class CourseUnit {
-
     private static final double MIN_WEIGHT = 0.0;
     private static final double MAX_WEIGHT = 1.0;
 
-    private final String code;
-    private final String name;
-    private final int ects;
-    private final Map<Competency, Double> competencyWeights;
+    @Id
+    @Column(name = "code", length = 50, nullable = false, unique = true)
+    private String code;
+
+    @Column(name = "name", nullable = false, length = 150)
+    private String name;
+
+    @Column(name = "ects", nullable = false)
+    private int ects;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "course_unit_competency_weight", joinColumns = @JoinColumn(name = "course_unit_code"))
+    @MapKeyEnumerated(EnumType.STRING)
+    @MapKeyColumn(name = "competency")
+    @Column(name = "weight", nullable = false)
+    private Map<Competency, Double> competencyWeights;
+
+    protected CourseUnit() {
+        // Exigido pelo JPA
+    }
 
     public CourseUnit(String code, String name, int ects, Map<Competency, Double> competencyWeights) {
         if (code == null || code.isBlank()) {
@@ -41,7 +59,7 @@ public class CourseUnit {
             }
             if (weight.isNaN() || weight < MIN_WEIGHT || weight > MAX_WEIGHT) {
                 throw new IllegalArgumentException(
-                        "Weight for " + competency + " must be between 0 and 1, but was " + weight);
+                    "Weight for " + competency + " must be between 0 and 1, but was " + weight);
             }
             validated.put(competency, weight);
         }
