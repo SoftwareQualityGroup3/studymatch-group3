@@ -3,6 +3,7 @@ package pt.studymatch.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import pt.studymatch.domain.Competency;
 import pt.studymatch.domain.SelfAssessment;
@@ -31,6 +32,7 @@ public class SelfAssessmentService {
      * Para o mesmo estudante + competência só pode existir
      * uma autoavaliação.
      */
+    @Transactional
     public SelfAssessment saveOrUpdate(
         Long studentId,
         Competency competency,
