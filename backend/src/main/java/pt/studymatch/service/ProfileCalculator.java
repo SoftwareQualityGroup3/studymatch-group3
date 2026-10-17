@@ -50,6 +50,11 @@ public class ProfileCalculator {
                     "Grade must be between 0 and 20");
             }
 
+            if (record.getCourseUnit().getCompetencyWeights().isEmpty()) {
+               throw new IllegalArgumentException(
+                       "Course unit must have at least one competency weight");
+            }
+
             // O peso está na CourseUnit e depende da competência.
             double weight =
                 record.getCourseUnit().weightFor(competency);
