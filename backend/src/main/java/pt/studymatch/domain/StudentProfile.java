@@ -1,25 +1,34 @@
 package pt.studymatch.domain;
 
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.Map;
+
 public class StudentProfile {
-    private final Double score; // "Double" e não "double" porque no caso sem evidência devolve-se null
-    private final int evidenceCount;
-    private final ProfileSource source;
 
-    public StudentProfile(Double score, int evidenceCount, ProfileSource source){
-        this.score = score;
-        this.evidenceCount = evidenceCount;
-        this.source = source;
+    // Guarda o resultado calculado de uma competência.
+    public record CompetencyResult(
+        Double score,
+        int evidenceCount,
+        ProfileSource source) {
     }
 
-    public Double getScore() {
-        return score;
+    private final Map<Competency, CompetencyResult> profiles;
+
+    public StudentProfile(
+        Map<Competency, CompetencyResult> profiles) {
+
+        // Guarda os perfis de cada competência num mapa.
+        // Depois de guardado, o mapa fica protegido contra alterações diretas.
+        this.profiles = Collections.unmodifiableMap(
+            new EnumMap<>(profiles));
     }
 
-    public int getEvidenceCount() {
-        return evidenceCount;
+    public Map<Competency, CompetencyResult> getProfiles() {
+        return profiles;
     }
 
-    public ProfileSource getSource() {
-        return source;
+    public CompetencyResult getProfile(Competency competency) {
+        return profiles.get(competency);
     }
 }

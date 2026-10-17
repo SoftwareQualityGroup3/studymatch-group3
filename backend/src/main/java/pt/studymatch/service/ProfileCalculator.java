@@ -1,9 +1,14 @@
 package pt.studymatch.service;
 
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+
+import pt.studymatch.domain.AcademicRecord;
+import pt.studymatch.domain.Competency;
 import pt.studymatch.domain.ProfileSource;
 import pt.studymatch.domain.StudentProfile;
-
-import java.util.List;
+import pt.studymatch.domain.StudentProfile.CompetencyResult;
 
 public class ProfileCalculator {
 
@@ -11,25 +16,43 @@ public class ProfileCalculator {
      * Calcula o perfil académico de raiz a partir dos resultados fornecidos.
      *
      * <p>Cada chamada recalcula todas as pontuações usando apenas a lista
-     * recebida. O calculator não guarda nem reutiliza resultados de chamadas
-     * anteriores.</p>
+     * recebida.</p>
      *
      * @param records resultados académicos usados no cálculo
      * @return perfil académico calculado
-     * @throws IllegalArgumentException se existir uma nota ou peso inválido
      */
     public StudentProfile calculate(List<AcademicRecord> records) {
+        Map<Competency, CompetencyResult> profiles =
+            new EnumMap<>(Competency.class);
+
+        for (Competency competency : Competency.values()) {
+            profiles.put(
+                competency,
+                calculateForCompetency(records, competency));
+        }
+
+        return new StudentProfile(profiles);
+    }
+
+    private CompetencyResult calculateForCompetency(
+        List<AcademicRecord> records,
+        Competency competency) {
+
         double totalWeightedGrade = 0.0;
         double totalWeight = 0.0;
         int evidenceCount = 0;
 
         for (AcademicRecord record : records) {
-            if (record.getGrade() < 0 || record.getGrade() > 20) {
+            double grade = record.getGrade().doubleValue();
+
+            if (grade < 0 || grade > 20) {
                 throw new IllegalArgumentException(
                     "Grade must be between 0 and 20");
             }
 
-            double weight = record.getWeight();
+            // O peso está na CourseUnit e depende da competência.
+            double weight =
+                record.getCourseUnit().weightFor(competency);
 
             if (weight < 0 || weight > 1) {
                 throw new IllegalArgumentException(
@@ -37,14 +60,14 @@ public class ProfileCalculator {
             }
 
             if (weight > 0) {
-                totalWeightedGrade += record.getGrade() * weight;
+                totalWeightedGrade += grade * weight;
                 totalWeight += weight;
                 evidenceCount++;
             }
         }
 
         if (totalWeight == 0.0) {
-            return new StudentProfile(
+            return new CompetencyResult(
                 null,
                 0,
                 ProfileSource.ACADEMIC);
@@ -52,7 +75,7 @@ public class ProfileCalculator {
 
         double score = totalWeightedGrade / totalWeight;
 
-        return new StudentProfile(
+        return new CompetencyResult(
             score,
             evidenceCount,
             ProfileSource.ACADEMIC);
