@@ -1,43 +1,32 @@
-import { useEffect, useState } from 'react'
-import { getHealth } from './api/health'
+import { Link, Navigate, Route, Routes } from 'react-router-dom'
+import HealthPage from './pages/HealthPage'
+import StudentCreatePage from './pages/StudentCreatePage'
+import StudentDetailPage from './pages/StudentDetailPage'
+import StudentEditPage from './pages/StudentEditPage'
+import StudentListPage from './pages/StudentListPage'
 
+// aqui é onde se liga cada endereço a uma página
+// quando houver mais páginas é só acrescentar uma Route
 function App() {
-  const [health, setHealth] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
-
-  useEffect(() => {
-    async function loadHealth() {
-      try {
-        const data = await getHealth()
-        setHealth(data)
-      } catch {
-        setError(true)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    loadHealth()
-  }, [])
-
   return (
     <main>
       <h1>StudyMatch</h1>
-      <h2>Estado do sistema</h2>
 
-      {loading && <p>A carregar...</p>}
+      {/* links que aparecem sempre no topo */}
+      <nav>
+        <Link to="/students">Estudantes</Link> <Link to="/health">Estado do sistema</Link>
+      </nav>
 
-      {error && (
-        <p>Não foi possível obter o estado da aplicação.</p>
-      )}
-
-      {!loading && !error && health && (
-        <div>
-          <p>Aplicação: {health.status}</p>
-          <p>Base de dados: {health.database}</p>
-        </div>
-      )}
+      <Routes>
+        {/* a raiz manda logo para a lista */}
+        <Route path="/" element={<Navigate to="/students" replace />} />
+        <Route path="/students" element={<StudentListPage />} />
+        <Route path="/students/new" element={<StudentCreatePage />} />
+        {/* o :id é a parte que muda tipo /students/4 */}
+        <Route path="/students/:id" element={<StudentDetailPage />} />
+        <Route path="/students/:id/edit" element={<StudentEditPage />} />
+        <Route path="/health" element={<HealthPage />} />
+      </Routes>
     </main>
   )
 }

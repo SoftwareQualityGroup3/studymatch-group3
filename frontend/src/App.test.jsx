@@ -1,10 +1,11 @@
 import { cleanup, render, screen } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import App from './App'
-import { getHealth } from './api/health'
+import { listStudents } from './api/students'
 
-vi.mock('./api/health', () => ({
-  getHealth: vi.fn(),
+vi.mock('./api/students', () => ({
+  listStudents: vi.fn(),
 }))
 
 afterEach(() => {
@@ -14,48 +15,26 @@ afterEach(() => {
 describe('App', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-
-    getHealth.mockResolvedValue({
-      status: 'UP',
-      database: 'UP',
-    })
+    listStudents.mockResolvedValue([])
   })
 
   it('apresenta o nome StudyMatch', () => {
-    render(<App />)
-
-    expect(
-      screen.getByRole('heading', { name: /studymatch/i })
-    ).toBeTruthy()
-  })
-
-  it('apresenta o estado da aplicação e da base de dados', async () => {
-    render(<App />)
-
-    expect(
-      screen.getByText('A carregar...')
-    ).toBeTruthy()
-
-    expect(
-      await screen.findByText('Aplicação: UP')
-    ).toBeTruthy()
-
-    expect(
-      screen.getByText('Base de dados: UP')
-    ).toBeTruthy()
-  })
-
-  it('apresenta uma mensagem de erro quando o backend está indisponível', async () => {
-    getHealth.mockRejectedValue(
-      new Error('Backend indisponível')
+    render(
+      <MemoryRouter initialEntries={['/students']}>
+        <App />
+      </MemoryRouter>
     )
 
-    render(<App />)
+    expect(screen.getByRole('heading', { name: 'StudyMatch' })).toBeTruthy()
+  })
 
-    expect(
-      await screen.findByText(
-        'Não foi possível obter o estado da aplicação.'
-      )
-    ).toBeTruthy()
+  it('redireciona a raiz para a lista de estudantes', async () => {
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <App />
+      </MemoryRouter>
+    )
+
+    expect(await screen.findByRole('heading', { name: 'Estudantes' })).toBeTruthy()
   })
 })
