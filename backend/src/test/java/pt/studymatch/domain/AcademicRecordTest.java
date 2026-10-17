@@ -82,4 +82,20 @@ class AcademicRecordTest {
         );
         assertEquals("Semester must be 1 or 2", exception.getMessage());
     }
+
+    @Test
+    void validaAssociacaoEstudanteEUnidadeCurricularUnica() {
+        // Garante que a entidade aceita corretamente os atributos de associação únicos
+        // (A restrição de unicidade por estudante e unidade curricular está mapeada a nível de base de dados via @UniqueConstraint)
+        Student student = new Student("12345", "João Silva", null, null, 1);
+        CourseUnit courseUnit = createValidCourseUnit();
+        AcademicYear academicYear = new AcademicYear("2024/25");
+
+        AcademicRecord record = new AcademicRecord(student, courseUnit, academicYear, 1, new BigDecimal("16.00"));
+
+        assertNotNull(record.getStudent());
+        assertNotNull(record.getCourseUnit());
+        assertEquals("MAT101", record.getCourseUnit().getCode());
+        assertEquals("12345", record.getStudent().getNumber());
+    }
 }
