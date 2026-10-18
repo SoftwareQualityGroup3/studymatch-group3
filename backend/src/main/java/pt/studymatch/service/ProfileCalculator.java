@@ -4,12 +4,15 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Component;
+
 import pt.studymatch.domain.AcademicRecord;
 import pt.studymatch.domain.Competency;
 import pt.studymatch.domain.ProfileSource;
 import pt.studymatch.domain.StudentProfile;
 import pt.studymatch.domain.StudentProfile.CompetencyResult;
 
+@Component
 public class ProfileCalculator {
 
     /**
@@ -51,8 +54,8 @@ public class ProfileCalculator {
             }
 
             if (record.getCourseUnit().getCompetencyWeights().isEmpty()) {
-               throw new IllegalArgumentException(
-                       "Course unit must have at least one competency weight");
+                throw new IllegalArgumentException(
+                    "Course unit must have at least one competency weight");
             }
 
             // O peso está na CourseUnit e depende da competência.
