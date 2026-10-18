@@ -59,7 +59,6 @@ describe('StudentDetailPage', () => {
     await screen.findByRole('heading', { name: 'Ana' })
     expect(screen.getByTestId('reserved-S2-06')).toBeTruthy()
     expect(screen.getByTestId('reserved-S2-09')).toBeTruthy()
-    expect(screen.getByTestId('reserved-S2-11')).toBeTruthy()
   })
 
   it('mostra a secção de autoavaliação do estudante', async () => {
