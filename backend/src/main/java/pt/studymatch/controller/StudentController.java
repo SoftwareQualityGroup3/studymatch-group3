@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import pt.studymatch.domain.StudentProfile;
@@ -58,14 +59,16 @@ public class StudentController {
     }
 
     /**
-     * Devolve todos os estudantes.
+     * Devolve todos os estudantes ou filtra por query (q) e curso (course).
      *
-     * GET /api/students
+     * GET /api/students?q=...&course=...
      */
     @GetMapping
-    public ResponseEntity<List<StudentResponse>> findAll() {
+    public ResponseEntity<List<StudentResponse>> findAll(
+        @RequestParam(required = false) String q,
+        @RequestParam(required = false) String course) {
 
-        List<StudentResponse> students = studentService.findAll();
+        List<StudentResponse> students = studentService.search(q, course);
 
         return ResponseEntity.ok(students);
     }
