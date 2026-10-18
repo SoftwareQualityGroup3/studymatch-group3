@@ -1,5 +1,7 @@
 package pt.studymatch.domain;
 
 public enum ProfileSource {
-    ACADEMIC
+    ACADEMIC,
+    SELF_ASSESSMENT,
+    MIXED
 }
