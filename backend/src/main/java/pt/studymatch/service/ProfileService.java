@@ -1,9 +1,9 @@
 package pt.studymatch.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import pt.studymatch.domain.AcademicRecord;
 import pt.studymatch.domain.StudentProfile;
+import pt.studymatch.exception.StudentNotFoundException; // <-- Importa a vossa exceção
 import pt.studymatch.repository.AcademicRecordRepository;
 import pt.studymatch.repository.StudentRepository;
 
@@ -26,7 +26,8 @@ public class ProfileService {
 
     public StudentProfile getProfileForStudent(Long studentId) {
         if (!studentRepository.existsById(studentId)) {
-            throw new EntityNotFoundException("Student not found with id: " + studentId);
+            // Lança a StudentNotFoundException que já tem o @ResponseStatus(HttpStatus.NOT_FOUND)
+            throw new StudentNotFoundException(studentId);
         }
 
         List<AcademicRecord> records = academicRecordRepository.findByStudentId(studentId);

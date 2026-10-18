@@ -17,12 +17,6 @@ public class ProfileCalculator {
 
     /**
      * Calcula o perfil académico de raiz a partir dos resultados fornecidos.
-     *
-     * <p>Cada chamada recalcula todas as pontuações usando apenas a lista
-     * recebida.</p>
-     *
-     * @param records resultados académicos usados no cálculo
-     * @return perfil académico calculado
      */
     public StudentProfile calculate(List<AcademicRecord> records) {
         Map<Competency, CompetencyResult> profiles =
