@@ -93,3 +93,8 @@ export function updateStudent(id, data) {
 export function saveSelfAssessment(id, data) {
   return request(`${STUDENTS_URL}/${id}/self-assessment`, jsonOptions('PUT', data))
 }
+
+// get /api/students/{id}/profile (responde 200 com o perfil calculado na hora)
+export function getStudentProfile(id) {
+  return request(`${STUDENTS_URL}/${id}/profile`)
+}
