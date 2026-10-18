@@ -6,6 +6,8 @@ import pt.studymatch.domain.StudentProfile;
 import pt.studymatch.exception.StudentNotFoundException; // <-- Importa a vossa exceção
 import pt.studymatch.repository.AcademicRecordRepository;
 import pt.studymatch.repository.StudentRepository;
+import pt.studymatch.domain.SelfAssessment;
+import pt.studymatch.repository.SelfAssessmentRepository;
 
 import java.util.List;
 
@@ -15,13 +17,15 @@ public class ProfileService {
     private final StudentRepository studentRepository;
     private final AcademicRecordRepository academicRecordRepository;
     private final ProfileCalculator profileCalculator;
+    private final SelfAssessmentRepository selfAssessmentRepository;
 
     public ProfileService(StudentRepository studentRepository,
                           AcademicRecordRepository academicRecordRepository,
-                          ProfileCalculator profileCalculator) {
+                          ProfileCalculator profileCalculator, SelfAssessmentRepository selfAssessmentRepository) {
         this.studentRepository = studentRepository;
         this.academicRecordRepository = academicRecordRepository;
         this.profileCalculator = profileCalculator;
+        this.selfAssessmentRepository = selfAssessmentRepository;
     }
 
     public StudentProfile getProfileForStudent(Long studentId) {
@@ -30,7 +34,9 @@ public class ProfileService {
             throw new StudentNotFoundException(studentId);
         }
 
-        List<AcademicRecord> records = academicRecordRepository.findByStudentId(studentId);
-        return profileCalculator.calculate(records);
+        List<AcademicRecord> records = academicRecordRepository.findByStudent_Id(studentId);
+        List<SelfAssessment> selfAssessments =
+            selfAssessmentRepository.findByStudentId(studentId);
+        return profileCalculator.calculate(records, selfAssessments);
     }
 }

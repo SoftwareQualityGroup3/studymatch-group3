@@ -59,7 +59,15 @@ describe('StudentDetailPage', () => {
     await screen.findByRole('heading', { name: 'Ana' })
     expect(screen.getByTestId('reserved-S2-06')).toBeTruthy()
     expect(screen.getByTestId('reserved-S2-09')).toBeTruthy()
-    expect(screen.getByTestId('reserved-S2-11')).toBeTruthy()
+  })
+
+  it('mostra a secção de autoavaliação do estudante', async () => {
+    getStudent.mockResolvedValue({ id: 4, number: '100', name: 'Ana', curricularYear: 1 })
+
+    renderAt('/students/4')
+
+    await screen.findByRole('heading', { name: 'Ana' })
+    expect(screen.getByRole('heading', { name: 'Autoavaliação' })).toBeTruthy()
   })
 
   it('mostra um traço nos campos opcionais vazios', async () => {

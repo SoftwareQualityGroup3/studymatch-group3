@@ -1,8 +1,9 @@
 import { Link, useParams } from 'react-router-dom'
 import useStudent from '../hooks/useStudent'
+import SelfAssessmentSection from '../components/SelfAssessmentSection'
 
 // códigos das issues que vão preencher estes espaços mais tarde
-const RESERVED_SECTIONS = ['S2-06', 'S2-09', 'S2-11']
+const RESERVED_SECTIONS = ['S2-06', 'S2-09']
 
 function StudentDetailPage() {
   // lê o id que vem no endereço, tipo /students/4
@@ -44,6 +45,8 @@ function StudentDetailPage() {
               <p>Espaço reservado para {code}.</p>
             </section>
           ))}
+          {/* S2-11: o estudante preenche a autoavaliação inicial */}
+          <SelfAssessmentSection studentId={student.id} />
         </>
       )}
     </section>
