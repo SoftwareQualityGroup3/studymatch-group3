@@ -71,6 +71,33 @@ describe('SelfAssessmentSection', () => {
     })
   })
 
+  it('avisa o perfil para recarregar depois de guardar', async () => {
+    saveSelfAssessment.mockResolvedValue({})
+    const listener = vi.fn()
+    window.addEventListener('student-profile-refresh', listener)
+
+    chooseAll()
+    fireEvent.click(saveButton())
+
+    await screen.findByRole('status')
+    window.removeEventListener('student-profile-refresh', listener)
+    expect(listener).toHaveBeenCalledTimes(1)
+    expect(listener.mock.calls[0][0].detail).toEqual({ studentId: 4 })
+  })
+
+  it('não avisa o perfil quando guardar falha', async () => {
+    saveSelfAssessment.mockRejectedValue(new ApiError(0, 'Não foi possível contactar o servidor.'))
+    const listener = vi.fn()
+    window.addEventListener('student-profile-refresh', listener)
+
+    chooseAll()
+    fireEvent.click(saveButton())
+
+    await screen.findByRole('alert')
+    window.removeEventListener('student-profile-refresh', listener)
+    expect(listener).not.toHaveBeenCalled()
+  })
+
   it('mostra o erro e mantém as escolhas quando guardar falha', async () => {
     saveSelfAssessment.mockRejectedValue(new ApiError(0, 'Não foi possível contactar o servidor.'))
 

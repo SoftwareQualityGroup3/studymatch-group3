@@ -49,6 +49,12 @@ function SelfAssessmentSection({ studentId }) {
       )
       await saveSelfAssessment(studentId, payload)
       setMessage('Autoavaliação guardada.')
+      // avisa a secção do perfil para recarregar (mesmo evento do S2-06)
+      window.dispatchEvent(
+        new CustomEvent('student-profile-refresh', {
+          detail: { studentId },
+        })
+      )
     } catch (e) {
       // as escolhas mantêm-se no ecrã para o estudante tentar outra vez
       setError(e.message || 'Não foi possível guardar a autoavaliação.')
