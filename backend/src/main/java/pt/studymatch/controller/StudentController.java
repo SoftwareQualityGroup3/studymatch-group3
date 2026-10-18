@@ -12,29 +12,34 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import pt.studymatch.domain.StudentProfile;
 import pt.studymatch.dto.StudentRequest;
 import pt.studymatch.dto.StudentResponse;
+import pt.studymatch.service.ProfileService;
 import pt.studymatch.service.StudentService;
 
 /**
  * Controller responsável pelos endpoints da API de estudantes.
  *
  * O controller recebe os pedidos HTTP e delega a lógica
- * para o StudentService.
+ * para os serviços correspondentes.
  */
 @RestController
 @RequestMapping("/api/students")
 public class StudentController {
 
     private final StudentService studentService;
+    private final ProfileService profileService;
 
     /**
-     * O Spring injeta automaticamente o StudentService.
+     * O Spring injeta automaticamente os serviços necessários.
      */
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService, ProfileService profileService) {
         this.studentService = studentService;
+        this.profileService = profileService;
     }
 
     /**
@@ -54,14 +59,16 @@ public class StudentController {
     }
 
     /**
-     * Devolve todos os estudantes.
+     * Devolve todos os estudantes ou filtra por query (q) e curso (course).
      *
-     * GET /api/students
+     * GET /api/students?q=...&course=...
      */
     @GetMapping
-    public ResponseEntity<List<StudentResponse>> findAll() {
+    public ResponseEntity<List<StudentResponse>> findAll(
+        @RequestParam(required = false) String q,
+        @RequestParam(required = false) String course) {
 
-        List<StudentResponse> students = studentService.findAll();
+        List<StudentResponse> students = studentService.search(q, course);
 
         return ResponseEntity.ok(students);
     }
@@ -93,5 +100,16 @@ public class StudentController {
         StudentResponse student = studentService.update(id, request);
 
         return ResponseEntity.ok(student);
+    }
+
+    /**
+     * Devolve o perfil académico de um estudante através do id.
+     *
+     * GET /api/students/{id}/profile
+     */
+    @GetMapping("/{id}/profile")
+    public ResponseEntity<StudentProfile> getProfile(@PathVariable Long id) {
+        StudentProfile profile = profileService.getProfileForStudent(id);
+        return ResponseEntity.ok(profile);
     }
 }
