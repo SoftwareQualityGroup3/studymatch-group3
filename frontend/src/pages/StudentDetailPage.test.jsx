@@ -1,12 +1,13 @@
-import { cleanup, render, screen } from '@testing-library/react'
+import { cleanup, render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import StudentDetailPage from './StudentDetailPage'
-import { ApiError, getStudent } from '../api/students'
+import { ApiError, getStudent, getStudentProfile } from '../api/students'
 
 vi.mock('../api/students', async (importOriginal) => ({
   ...(await importOriginal()),
   getStudent: vi.fn(),
+  getStudentProfile: vi.fn(),
 }))
 
 afterEach(() => {
@@ -27,6 +28,9 @@ function renderAt(path) {
 describe('StudentDetailPage', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    // o perfil também é pedido quando o detalhe abre
+    // fica a carregar para não mexer no resto do que estes testes verificam
+    getStudentProfile.mockReturnValue(new Promise(() => {}))
   })
 
   it('apresenta os dados do estudante e a ligação para editar', async () => {
@@ -51,14 +55,23 @@ describe('StudentDetailPage', () => {
     )
   })
 
-  it('deixa espaço para as secções das próximas issues', async () => {
+  it('deixa espaço para a secção da próxima issue', async () => {
     getStudent.mockResolvedValue({ id: 4, number: '100', name: 'Ana', curricularYear: 1 })
 
     renderAt('/students/4')
 
     await screen.findByRole('heading', { name: 'Ana' })
     expect(screen.getByTestId('reserved-S2-06')).toBeTruthy()
-    expect(screen.getByTestId('reserved-S2-09')).toBeTruthy()
+  })
+
+  it('mostra a secção do perfil e pede o perfil do estudante', async () => {
+    getStudent.mockResolvedValue({ id: 4, number: '100', name: 'Ana', curricularYear: 1 })
+
+    renderAt('/students/4')
+
+    await screen.findByRole('heading', { name: 'Ana' })
+    expect(screen.getByRole('heading', { name: 'Perfil' })).toBeTruthy()
+    await waitFor(() => expect(getStudentProfile).toHaveBeenCalledWith(4))
   })
 
   it('mostra a secção de autoavaliação do estudante', async () => {
