@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import pt.studymatch.dto.ApiErrorResponse;
+import pt.studymatch.exception.CourseUnitNotFoundException;
+import pt.studymatch.exception.DuplicateAcademicRecordException;
 import pt.studymatch.exception.DuplicateStudentNumberException;
 import pt.studymatch.exception.StudentNotFoundException;
 
@@ -71,6 +73,35 @@ public class GlobalExceptionHandler {
             .status(HttpStatus.CONFLICT)
             .body(new ApiErrorResponse(
                 Map.of("number", exception.getMessage())
+            ));
+    }
+
+    /**
+     * Trata pedidos para unidades curriculares que não existem.
+     */
+    @ExceptionHandler(CourseUnitNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleCourseUnitNotFound(
+        CourseUnitNotFoundException exception) {
+
+        return ResponseEntity
+            .status(HttpStatus.NOT_FOUND)
+            .body(new ApiErrorResponse(
+                Map.of("courseUnitCode", exception.getMessage())
+            ));
+    }
+
+    /**
+     * Trata resultados académicos repetidos
+     * para o mesmo estudante e unidade curricular.
+     */
+    @ExceptionHandler(DuplicateAcademicRecordException.class)
+    public ResponseEntity<ApiErrorResponse> handleDuplicateAcademicRecord(
+        DuplicateAcademicRecordException exception) {
+
+        return ResponseEntity
+            .status(HttpStatus.CONFLICT)
+            .body(new ApiErrorResponse(
+                Map.of("courseUnitCode", exception.getMessage())
             ));
     }
 

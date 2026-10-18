@@ -1,8 +1,9 @@
 import { Link, useParams } from 'react-router-dom'
 import useStudent from '../hooks/useStudent'
+import AcademicHistorySection from '../components/AcademicHistorySection'
 
 // códigos das issues que vão preencher estes espaços mais tarde
-const RESERVED_SECTIONS = ['S2-06', 'S2-09', 'S2-11']
+const RESERVED_SECTIONS = ['S2-09', 'S2-11']
 
 function StudentDetailPage() {
   // lê o id que vem no endereço, tipo /students/4
@@ -37,6 +38,9 @@ function StudentDetailPage() {
             <dt>Ano curricular</dt>
             <dd>{student.curricularYear}</dd>
           </dl>
+
+          {/* histórico académico do S2-06 */}
+          <AcademicHistorySection studentId={student.id} />
 
           {/* espaços vazios onde as próximas issues vão pôr o seu conteúdo */}
           {RESERVED_SECTIONS.map((code) => (
