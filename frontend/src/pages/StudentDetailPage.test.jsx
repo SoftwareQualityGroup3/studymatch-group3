@@ -3,11 +3,18 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import StudentDetailPage from './StudentDetailPage'
 import { ApiError, getStudent, getStudentProfile } from '../api/students'
+import { listAcademicRecords, listCourseUnits } from '../api/academicRecords'
 
 vi.mock('../api/students', async (importOriginal) => ({
   ...(await importOriginal()),
   getStudent: vi.fn(),
   getStudentProfile: vi.fn(),
+}))
+
+vi.mock('../api/academicRecords', () => ({
+  listAcademicRecords: vi.fn(),
+  listCourseUnits: vi.fn(),
+  createAcademicRecord: vi.fn(),
 }))
 
 afterEach(() => {
@@ -31,6 +38,9 @@ describe('StudentDetailPage', () => {
     // o perfil também é pedido quando o detalhe abre
     // fica a carregar para não mexer no resto do que estes testes verificam
     getStudentProfile.mockReturnValue(new Promise(() => {}))
+    // o histórico académico também carrega ao abrir o detalhe
+    listAcademicRecords.mockResolvedValue([])
+    listCourseUnits.mockResolvedValue([])
   })
 
   it('apresenta os dados do estudante e a ligação para editar', async () => {
@@ -46,22 +56,34 @@ describe('StudentDetailPage', () => {
     renderAt('/students/4')
 
     expect(screen.getByText('A carregar...')).toBeTruthy()
-    expect(await screen.findByRole('heading', { name: 'Ana Silva' })).toBeTruthy()
+
+    expect(
+      await screen.findByRole('heading', { name: 'Ana Silva' })
+    ).toBeTruthy()
+
     expect(getStudent).toHaveBeenCalledWith('4')
-    expect(screen.getByText('ana@isep.ipp.pt')).toBeTruthy()
-    expect(screen.getByText('LEI')).toBeTruthy()
-    expect(screen.getByRole('link', { name: 'Editar' }).getAttribute('href')).toBe(
-      '/students/4/edit'
-    )
+
+    expect(
+      screen.getByText('ana@isep.ipp.pt')
+    ).toBeTruthy()
+
+    expect(
+      screen.getByText('LEI')
+    ).toBeTruthy()
+
+    expect(
+      screen.getByRole('link', { name: 'Editar' }).getAttribute('href')
+    ).toBe('/students/4/edit')
   })
 
-  it('deixa espaço para a secção da próxima issue', async () => {
+  it('mostra a secção do histórico académico e pede os resultados do estudante', async () => {
     getStudent.mockResolvedValue({ id: 4, number: '100', name: 'Ana', curricularYear: 1 })
 
     renderAt('/students/4')
 
     await screen.findByRole('heading', { name: 'Ana' })
-    expect(screen.getByTestId('reserved-S2-06')).toBeTruthy()
+    expect(screen.getByRole('heading', { name: 'Histórico académico' })).toBeTruthy()
+    await waitFor(() => expect(listAcademicRecords).toHaveBeenCalledWith(4))
   })
 
   it('mostra a secção do perfil e pede o perfil do estudante', async () => {
@@ -96,22 +118,36 @@ describe('StudentDetailPage', () => {
     renderAt('/students/4')
 
     await screen.findByRole('heading', { name: 'Ana' })
-    expect(screen.getAllByText('—')).toHaveLength(2)
+
+    expect(
+      screen.getAllByText('—')
+    ).toHaveLength(2)
   })
 
   it('diz que o estudante não foi encontrado num 404', async () => {
-    getStudent.mockRejectedValue(new ApiError(404, 'Estudante não encontrado.'))
+    getStudent.mockRejectedValue(
+      new ApiError(404, 'Estudante não encontrado.')
+    )
 
     renderAt('/students/99')
 
-    expect((await screen.findByRole('alert')).textContent).toBe('Estudante não encontrado.')
+    expect(
+      (await screen.findByRole('alert')).textContent
+    ).toBe('Estudante não encontrado.')
   })
 
   it('pede para verificar o backend quando o servidor está desligado', async () => {
-    getStudent.mockRejectedValue(new ApiError(0, 'Não foi possível contactar o servidor.'))
+    getStudent.mockRejectedValue(
+      new ApiError(
+        0,
+        'Não foi possível contactar o servidor.'
+      )
+    )
 
     renderAt('/students/4')
 
-    expect((await screen.findByRole('alert')).textContent).toContain('Verifique se o backend')
+    expect(
+      (await screen.findByRole('alert')).textContent
+    ).toContain('Verifique se o backend')
   })
 })

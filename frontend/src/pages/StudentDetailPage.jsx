@@ -1,10 +1,8 @@
 import { Link, useParams } from 'react-router-dom'
 import useStudent from '../hooks/useStudent'
+import AcademicHistorySection from '../components/AcademicHistorySection'
 import ProfileSection from '../components/ProfileSection'
 import SelfAssessmentSection from '../components/SelfAssessmentSection'
-
-// códigos das issues que vão preencher estes espaços mais tarde
-const RESERVED_SECTIONS = ['S2-06']
 
 function StudentDetailPage() {
   // lê o id que vem no endereço, tipo /students/4
@@ -40,12 +38,8 @@ function StudentDetailPage() {
             <dd>{student.curricularYear}</dd>
           </dl>
 
-          {/* espaços vazios onde as próximas issues vão pôr o seu conteúdo */}
-          {RESERVED_SECTIONS.map((code) => (
-            <section key={code} data-testid={`reserved-${code}`}>
-              <p>Espaço reservado para {code}.</p>
-            </section>
-          ))}
+          {/* S2-06: histórico académico, avisa o perfil quando há um resultado novo */}
+          <AcademicHistorySection studentId={student.id} />
           {/* S2-09: perfil calculado, recarrega sozinho quando há resultados ou autoavaliação novos */}
           <ProfileSection studentId={student.id} />
           {/* S2-11: o estudante preenche a autoavaliação inicial */}
