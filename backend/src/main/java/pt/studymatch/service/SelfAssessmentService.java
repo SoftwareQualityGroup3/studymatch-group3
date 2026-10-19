@@ -1,6 +1,7 @@
 package pt.studymatch.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,7 +82,8 @@ public class SelfAssessmentService {
         return selfAssessmentRepository.findByStudentId(studentId);
     }
 
-    //guarda as quatro notas da autoavaliação de uma só vez
+    //guarda de uma só vez as notas da autoavaliação que foram enviadas
+    //basta uma competência: as que não vêm no pedido ficam como estavam
     //se uma das competências falhar, nenhuma fica guardada e a autoavaliação não fica a meio
     //repetir o pedido com os mesmos valores dá o mesmo resultado
     @Transactional
@@ -89,10 +91,18 @@ public class SelfAssessmentService {
         Long studentId,
         SelfAssessmentRequest request) {
 
-        // Cada competência reutiliza o saveOrUpdate:
+        Map<Competency, Integer> values = request.toValues();
+
+        // Pedido sem nenhuma competência não tem nada para guardar (400).
+        if (values.isEmpty()) {
+            throw new IllegalArgumentException(
+                "At least one competency must be provided");
+        }
+
+        // Cada competência enviada reutiliza o saveOrUpdate:
         // cria se não existir, atualiza se já existir.
         // Estudante inexistente lança StudentNotFoundException (404).
-        request.toValues().forEach((competency, value) ->
+        values.forEach((competency, value) ->
             saveOrUpdate(studentId, competency, value));
 
         return SelfAssessmentResponse.from(

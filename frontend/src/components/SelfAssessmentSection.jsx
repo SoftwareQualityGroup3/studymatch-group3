@@ -20,15 +20,15 @@ const EMPTY_VALUES = {
 }
 
 // secção "Autoavaliação" do detalhe do estudante
-// o estudante escolhe de 1 a 5 em cada competência e guarda
+// o estudante escolhe de 1 a 5 nas competências que quiser (pelo menos uma) e guarda
 function SelfAssessmentSection({ studentId }) {
   const [values, setValues] = useState(EMPTY_VALUES)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
 
-  // o backend pede as quatro notas, por isso só se guarda com todas escolhidas
-  const complete = COMPETENCIES.every(({ name }) => values[name] !== '')
+  // basta escolher uma competência; as que ficam por escolher não são enviadas
+  const hasChoice = COMPETENCIES.some(({ name }) => values[name] !== '')
 
   function handleChange(name, value) {
     setValues((current) => ({ ...current, [name]: value }))
@@ -44,8 +44,12 @@ function SelfAssessmentSection({ studentId }) {
 
     try {
       // os seletores guardam texto, por isso as notas passam a número
+      // só vão as competências escolhidas
       const payload = Object.fromEntries(
-        COMPETENCIES.map(({ name }) => [name, Number(values[name])])
+        COMPETENCIES.filter(({ name }) => values[name] !== '').map(({ name }) => [
+          name,
+          Number(values[name]),
+        ])
       )
       await saveSelfAssessment(studentId, payload)
       setMessage('Autoavaliação guardada.')
@@ -86,7 +90,7 @@ function SelfAssessmentSection({ studentId }) {
           </div>
         ))}
 
-        <button type="submit" disabled={!complete || saving}>
+        <button type="submit" disabled={!hasChoice || saving}>
           {saving ? 'A guardar...' : 'Guardar autoavaliação'}
         </button>
       </form>
