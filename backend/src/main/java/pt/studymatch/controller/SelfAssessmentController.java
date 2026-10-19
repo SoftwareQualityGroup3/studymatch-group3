@@ -24,7 +24,7 @@ public class SelfAssessmentController {
         this.selfAssessmentService = selfAssessmentService;
     }
 
-    // put guarda as quatro notas (cria ou substitui as que já existiam)
+    // put guarda as notas enviadas, de uma a quatro competências (cria ou substitui as que já existiam)
     // é put e não post porque repetir o pedido dá sempre o mesmo resultado
     // o valid faz o spring rejeitar valores fora de 1-5 com 400
     @PutMapping

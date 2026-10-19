@@ -108,18 +108,46 @@ class SelfAssessmentControllerTest {
                 .value("databases must be between 1 and 5"));
     }
 
-    // valor em falta (null) também é rejeitado, são precisos os quatro
+    // basta preencher uma competência: as outras podem faltar e o pedido é aceite
     @Test
-    void putReturns400WhenAValueIsMissing() throws Exception {
+    void putAcceptsARequestWithOnlyOneCompetency() throws Exception {
+        when(selfAssessmentService.saveAll(eq(1L), any(SelfAssessmentRequest.class)))
+            .thenReturn(new SelfAssessmentResponse(3, null, null, null));
+
         mockMvc.perform(put(URL).contentType(MediaType.APPLICATION_JSON)
                 .content("""
-                        { "programming": 3, "mathematics": 4, "databases": 2 }
+                        { "programming": 3 }
+                        """))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.programming").value(3))
+            .andExpect(jsonPath("$.mathematics").isEmpty());
+    }
+
+    // uma competência em falta não impede que as enviadas sejam validadas
+    @Test
+    void putStillValidatesTheCompetenciesThatWereSent() throws Exception {
+        mockMvc.perform(put(URL).contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                        { "programming": 3, "databases": 9 }
                         """))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.fieldErrors.softwareEngineering")
-                .value("softwareEngineering is required"));
+            .andExpect(jsonPath("$.fieldErrors.databases")
+                .value("databases must be between 1 and 5"));
 
         verify(selfAssessmentService, never()).saveAll(any(), any());
+    }
+
+    // pedido sem nenhuma competência: o service rejeita e o handler devolve 400
+    @Test
+    void putReturns400WhenNoCompetencyIsSent() throws Exception {
+        when(selfAssessmentService.saveAll(eq(1L), any(SelfAssessmentRequest.class)))
+            .thenThrow(new IllegalArgumentException("At least one competency must be provided"));
+
+        mockMvc.perform(put(URL).contentType(MediaType.APPLICATION_JSON)
+                .content("{}"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.fieldErrors.general")
+                .value("At least one competency must be provided"));
     }
 
     // estudante que não existe dá 404 (o service lança a exceção)

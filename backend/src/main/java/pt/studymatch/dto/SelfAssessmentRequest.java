@@ -4,41 +4,47 @@ import java.util.EnumMap;
 import java.util.Map;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import pt.studymatch.domain.Competency;
 
 // dto com a autoavaliação que o estudante envia (uma nota de 1 a 5 por competência)
-// são Integer e não int para o notnull conseguir detetar quando falta um valor
-// valores fora de 1-5 ou em falta dão 400 sem chegar ao service
+// o estudante pode preencher só as competências que quiser, por isso cada campo é opcional
+// são Integer e não int para poderem ficar a null quando a competência não é enviada
+// valores fora de 1-5 dão 400 sem chegar ao service (o null passa no min e no max)
+// pedido sem nenhuma competência é rejeitado no service
 public record SelfAssessmentRequest(
-    @NotNull(message = "programming is required")
     @Min(value = 1, message = "programming must be between 1 and 5")
     @Max(value = 5, message = "programming must be between 1 and 5")
     Integer programming,
 
-    @NotNull(message = "mathematics is required")
     @Min(value = 1, message = "mathematics must be between 1 and 5")
     @Max(value = 5, message = "mathematics must be between 1 and 5")
     Integer mathematics,
 
-    @NotNull(message = "databases is required")
     @Min(value = 1, message = "databases must be between 1 and 5")
     @Max(value = 5, message = "databases must be between 1 and 5")
     Integer databases,
 
-    @NotNull(message = "softwareEngineering is required")
     @Min(value = 1, message = "softwareEngineering must be between 1 and 5")
     @Max(value = 5, message = "softwareEngineering must be between 1 and 5")
     Integer softwareEngineering
 ) {
 
-    // passa os quatro valores para o formato que o domínio usa (competência - valor)
+    // passa os valores enviados para o formato que o domínio usa (competência - valor)
+    // as competências que não foram enviadas (null) ficam de fora
     public Map<Competency, Integer> toValues() {
         Map<Competency, Integer> values = new EnumMap<>(Competency.class);
-        values.put(Competency.PROGRAMMING, programming);
-        values.put(Competency.MATHEMATICS, mathematics);
-        values.put(Competency.DATABASES, databases);
-        values.put(Competency.SOFTWARE_ENGINEERING, softwareEngineering);
+        putIfPresent(values, Competency.PROGRAMMING, programming);
+        putIfPresent(values, Competency.MATHEMATICS, mathematics);
+        putIfPresent(values, Competency.DATABASES, databases);
+        putIfPresent(values, Competency.SOFTWARE_ENGINEERING, softwareEngineering);
         return values;
+    }
+
+    private static void putIfPresent(
+        Map<Competency, Integer> values, Competency competency, Integer value) {
+
+        if (value != null) {
+            values.put(competency, value);
+        }
     }
 }

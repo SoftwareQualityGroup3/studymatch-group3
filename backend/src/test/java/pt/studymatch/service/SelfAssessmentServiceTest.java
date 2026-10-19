@@ -97,6 +97,35 @@ class SelfAssessmentServiceTest {
         verify(selfAssessmentRepository, times(4)).save(any(SelfAssessment.class));
     }
 
+    // só uma competência enviada: grava só essa e as outras ficam como estavam
+    @Test
+    void saveAllSavesOnlyTheCompetenciesThatWereSent() {
+        when(studentRepository.findById(STUDENT_ID)).thenReturn(Optional.of(student));
+        when(selfAssessmentRepository
+            .findByStudentIdAndCompetency(STUDENT_ID, Competency.PROGRAMMING))
+            .thenReturn(Optional.empty());
+        when(selfAssessmentRepository.save(any(SelfAssessment.class)))
+            .thenAnswer(invocation -> invocation.getArgument(0));
+        when(selfAssessmentRepository.findByStudentId(STUDENT_ID)).thenReturn(List.of(
+            new SelfAssessment(student, Competency.PROGRAMMING, 3)));
+
+        SelfAssessmentResponse response = selfAssessmentService.saveAll(
+            STUDENT_ID, new SelfAssessmentRequest(3, null, null, null));
+
+        verify(selfAssessmentRepository, times(1)).save(any(SelfAssessment.class));
+        assertEquals(new SelfAssessmentResponse(3, null, null, null), response);
+    }
+
+    // pedido sem nenhuma competência: rejeitado e não grava nada
+    @Test
+    void saveAllThrowsWhenNoCompetencyIsProvided() {
+        assertThrows(IllegalArgumentException.class,
+            () -> selfAssessmentService.saveAll(
+                STUDENT_ID, new SelfAssessmentRequest(null, null, null, null)));
+
+        verify(selfAssessmentRepository, never()).save(any());
+    }
+
     // estudante inexistente: lança a exceção que dá 404 e não grava nada
     @Test
     void saveAllThrowsWhenTheStudentDoesNotExist() {

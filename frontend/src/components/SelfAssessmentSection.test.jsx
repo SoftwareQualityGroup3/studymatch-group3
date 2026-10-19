@@ -44,16 +44,25 @@ describe('SelfAssessmentSection', () => {
     }
   })
 
-  it('só deixa guardar com as quatro competências escolhidas', () => {
+  it('só deixa guardar depois de escolher pelo menos uma competência', () => {
     expect(saveButton().disabled).toBe(true)
 
     choose('Programação', '3')
-    choose('Matemática', '4')
-    choose('Bases de dados', '2')
-    expect(saveButton().disabled).toBe(true)
-
-    choose('Engenharia de software', '5')
     expect(saveButton().disabled).toBe(false)
+
+    // voltar a deixar tudo vazio volta a desativar o botão
+    choose('Programação', '')
+    expect(saveButton().disabled).toBe(true)
+  })
+
+  it('envia só as competências escolhidas', async () => {
+    saveSelfAssessment.mockResolvedValue({})
+
+    choose('Matemática', '4')
+    fireEvent.click(saveButton())
+
+    expect((await screen.findByRole('status')).textContent).toBe('Autoavaliação guardada.')
+    expect(saveSelfAssessment).toHaveBeenCalledWith(4, { mathematics: 4 })
   })
 
   it('envia as notas como números e avisa que guardou', async () => {
