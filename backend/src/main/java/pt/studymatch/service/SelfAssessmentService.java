@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import pt.studymatch.domain.Competency;
 import pt.studymatch.domain.SelfAssessment;
 import pt.studymatch.domain.Student;
+import pt.studymatch.dto.SelfAssessmentRequest;
+import pt.studymatch.dto.SelfAssessmentResponse;
 import pt.studymatch.exception.StudentNotFoundException;
 import pt.studymatch.repository.SelfAssessmentRepository;
 import pt.studymatch.repository.StudentRepository;
@@ -77,5 +79,37 @@ public class SelfAssessmentService {
      */
     public List<SelfAssessment> findByStudentId(Long studentId) {
         return selfAssessmentRepository.findByStudentId(studentId);
+    }
+
+    //guarda as quatro notas da autoavaliação de uma só vez
+    //se uma das competências falhar, nenhuma fica guardada e a autoavaliação não fica a meio
+    //repetir o pedido com os mesmos valores dá o mesmo resultado
+    @Transactional
+    public SelfAssessmentResponse saveAll(
+        Long studentId,
+        SelfAssessmentRequest request) {
+
+        // Cada competência reutiliza o saveOrUpdate:
+        // cria se não existir, atualiza se já existir.
+        // Estudante inexistente lança StudentNotFoundException (404).
+        request.toValues().forEach((competency, value) ->
+            saveOrUpdate(studentId, competency, value));
+
+        return SelfAssessmentResponse.from(
+            selfAssessmentRepository.findByStudentId(studentId));
+    }
+
+    //devolve a autoavaliação de um estudante já em formato de resposta
+    //um estudante sem autoavaliação recebe os valores a null
+    //um estudante que não existe lança StudentNotFoundException (404)
+    @Transactional(readOnly = true)
+    public SelfAssessmentResponse getByStudentId(Long studentId) {
+
+        if (!studentRepository.existsById(studentId)) {
+            throw new StudentNotFoundException(studentId);
+        }
+
+        return SelfAssessmentResponse.from(
+            selfAssessmentRepository.findByStudentId(studentId));
     }
 }

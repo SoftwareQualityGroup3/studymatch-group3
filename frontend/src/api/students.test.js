@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { ApiError, createStudent, getStudent, listStudents, updateStudent } from './students'
+import { ApiError, createStudent, getStudent, listStudents, updateStudent, saveSelfAssessment, getStudentProfile } from './students'
 
 // cria uma resposta falsa do fetch com o estado e o corpo que quisermos
 function mockResponse(status, body) {
@@ -127,5 +127,50 @@ describe('api de estudantes', () => {
 
     expect(error.status).toBe(0)
     expect(error.message).toBe('Não foi possível contactar o servidor.')
+  })
+
+  it('guarda a autoavaliação com put e o corpo em json', async () => {
+    const data = { programming: 3, mathematics: 4, databases: 2, softwareEngineering: 5 }
+    const fetchMock = vi.fn().mockResolvedValue(mockResponse(200, data))
+    vi.stubGlobal('fetch', fetchMock)
+
+    await saveSelfAssessment(4, data)
+
+    expect(fetchMock).toHaveBeenCalledWith('/api/students/4/self-assessment', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+  })
+
+  it('converte um 400 da autoavaliação num erro da api com os erros por campo', async () => {
+    const fieldErrors = { programming: 'programming must be between 1 and 5' }
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(mockResponse(400, { fieldErrors })))
+
+    const error = await catchError(saveSelfAssessment(4, { programming: 9 }))
+
+    expect(error).toBeInstanceOf(ApiError)
+    expect(error.status).toBe(400)
+    expect(error.fieldErrors).toEqual(fieldErrors)
+  })
+
+  it('obtém o perfil do estudante com get /api/students/{id}/profile', async () => {
+    const profile = { profiles: { PROGRAMMING: { score: 15.5, evidenceCount: 2, source: 'MIXED' } } }
+    const fetchMock = vi.fn().mockResolvedValue(mockResponse(200, profile))
+    vi.stubGlobal('fetch', fetchMock)
+
+    const result = await getStudentProfile(4)
+
+    expect(fetchMock).toHaveBeenCalledWith('/api/students/4/profile', undefined)
+    expect(result).toEqual(profile)
+  })
+
+  it('devolve o estado 404 quando se pede o perfil de um estudante que não existe', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(mockResponse(404, {})))
+
+    const error = await catchError(getStudentProfile(99))
+
+    expect(error).toBeInstanceOf(ApiError)
+    expect(error.status).toBe(404)
   })
 })

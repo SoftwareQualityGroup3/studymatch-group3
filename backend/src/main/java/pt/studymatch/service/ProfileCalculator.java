@@ -4,6 +4,8 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Component;
+
 import pt.studymatch.domain.AcademicRecord;
 import pt.studymatch.domain.Competency;
 import pt.studymatch.domain.ProfileSource;
@@ -11,6 +13,7 @@ import pt.studymatch.domain.SelfAssessment;
 import pt.studymatch.domain.StudentProfile;
 import pt.studymatch.domain.StudentProfile.CompetencyResult;
 
+@Component
 public class ProfileCalculator {
 
     // Responsável por aplicar a regra de cold start.

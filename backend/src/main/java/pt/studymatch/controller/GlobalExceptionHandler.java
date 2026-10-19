@@ -63,20 +63,6 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Trata números de estudante repetidos.
-     */
-    @ExceptionHandler(DuplicateStudentNumberException.class)
-    public ResponseEntity<ApiErrorResponse> handleDuplicateNumber(
-        DuplicateStudentNumberException exception) {
-
-        return ResponseEntity
-            .status(HttpStatus.CONFLICT)
-            .body(new ApiErrorResponse(
-                Map.of("number", exception.getMessage())
-            ));
-    }
-
-    /**
      * Trata pedidos para unidades curriculares que não existem.
      */
     @ExceptionHandler(CourseUnitNotFoundException.class)
@@ -91,8 +77,21 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Trata resultados académicos repetidos
-     * para o mesmo estudante e unidade curricular.
+     * Trata números de estudante repetidos.
+     */
+    @ExceptionHandler(DuplicateStudentNumberException.class)
+    public ResponseEntity<ApiErrorResponse> handleDuplicateNumber(
+        DuplicateStudentNumberException exception) {
+
+        return ResponseEntity
+            .status(HttpStatus.CONFLICT)
+            .body(new ApiErrorResponse(
+                Map.of("number", exception.getMessage())
+            ));
+    }
+
+    /**
+     * Trata registos académicos duplicados.
      */
     @ExceptionHandler(DuplicateAcademicRecordException.class)
     public ResponseEntity<ApiErrorResponse> handleDuplicateAcademicRecord(

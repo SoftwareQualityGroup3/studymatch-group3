@@ -25,12 +25,10 @@ public class StudentService {
      */
     public StudentResponse create(StudentRequest request) {
 
-        // Não pode existir outro estudante com o mesmo número.
         if (studentRepository.existsByNumber(request.number())) {
             throw new DuplicateStudentNumberException(request.number());
         }
 
-        // Converte os dados recebidos no DTO para a entidade Student.
         Student student = new Student(
             request.number(),
             request.name(),
@@ -39,21 +37,26 @@ public class StudentService {
             request.curricularYear()
         );
 
-        // Guarda o estudante na base de dados.
         Student savedStudent = studentRepository.save(student);
 
-        // Converte a entidade guardada para o DTO que será devolvido pela API.
         return StudentResponse.from(savedStudent);
     }
 
     /**
-     * Devolve todos os estudantes.
+     * Devolve todos os estudantes ou filtra por query e curso.
      */
-    public List<StudentResponse> findAll() {
-        return studentRepository.findAll()
+    public List<StudentResponse> search(String q, String course) {
+        return studentRepository.searchStudents(q, course)
             .stream()
             .map(StudentResponse::from)
             .toList();
+    }
+
+    /**
+     * Mantém compatibilidade caso seja chamado sem parâmetros.
+     */
+    public List<StudentResponse> findAll() {
+        return search(null, null);
     }
 
     /**
@@ -77,8 +80,6 @@ public class StudentService {
             .orElseThrow(() ->
                 new StudentNotFoundException(id));
 
-        // Permite manter o mesmo número do próprio estudante,
-        // mas impede usar o número de outro estudante.
         if (studentRepository.existsByNumberAndIdNot(request.number(), id)) {
             throw new DuplicateStudentNumberException(request.number());
         }

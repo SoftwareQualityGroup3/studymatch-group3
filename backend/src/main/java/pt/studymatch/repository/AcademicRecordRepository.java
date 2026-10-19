@@ -10,6 +10,12 @@ public interface AcademicRecordRepository extends JpaRepository<AcademicRecord, 
     // verifica se o aluno já tem registo naquela uc e é usado para evitar duplicados
     // o underscore diz ao spring para entrar na relação (student e depois id)
     boolean existsByStudent_IdAndCourseUnit_Code(Long studentId, String courseUnitCode);
+
     // devolve todos os registos de um aluno
     List<AcademicRecord> findByStudent_Id(Long studentId);
+
+    // Compatibilidade com o ProfileService que chama sem underscore
+    default List<AcademicRecord> findByStudentId(Long studentId) {
+        return findByStudent_Id(studentId);
+    }
 }
