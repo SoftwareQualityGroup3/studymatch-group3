@@ -1,151 +1,179 @@
 # Cold Start: Estudante sem (ou com pouco) Histórico Académico
 
-Este documento analisa o que acontece quando um estudante tem pouco ou nenhum histórico académico. O enunciado deixa a estratégia em aberto, pelo que se propõe e justifica uma estratégia inicial.
+Este documento descreve o comportamento esperado do StudyMatch quando um estudante tem pouco ou nenhum histórico académico. A estratégia deixa de depender da autoavaliação de 1–5 e passa a utilizar testes de nível por competência.
 
-Os casos de uso mantêm-se ao nível funcional: não definem fórmulas, algoritmos nem detalhes de implementação.
+As regras de cálculo, os pesos, os limites de tempo e as decisões de segurança estão definidos em [`../decisions/ADR-004-cold-start.md`](../decisions/ADR-004-cold-start.md). Os casos de uso descrevem o comportamento funcional, sem definir endpoints, tabelas ou classes de implementação.
 
 ---
 
 ## 1. Problema
 
-O perfil do estudante (UC-PER-1 e UC-PER-2) é construído a partir de evidências curriculares e não curriculares. Um estudante no 1.º semestre, ou que ingressa sem histórico, tem poucas ou nenhumas evidências. O sistema precisa de o representar **sem inventar informação**, mantendo a regra já definida de que uma competência só aparece no perfil quando existe pelo menos uma evidência associada.
+A autoavaliação de 1–5 utilizada no Sprint 2 dependia da perceção do próprio estudante. Essa perceção pode ser subjetiva, pode ser sobrestimada e não garante que estudantes diferentes interpretem a escala da mesma forma. Além disso, a conversão por multiplicação por 4 fazia com que o valor mais baixo correspondesse a 4/20, o que inflacionava estruturalmente o resultado.
 
-O caso de uso UC-IDE-1 (A1) deixa o tratamento de *cold start* fora do seu âmbito e remete-o para esta área.
+Por outro lado, esperar pelas primeiras notas académicas deixa estudantes sem histórico sem informação útil sobre as suas competências.
+
+O StudyMatch passa, por isso, a recolher evidência através de testes de nível com dificuldade crescente e tempo limitado. O objetivo é produzir uma estimativa comparável, sem apresentar como conhecido um nível para o qual não existem evidências.
 
 ## 2. Atores
 
-- **Estudante** — fornece informação inicial e acompanha a evolução do seu perfil.
-- **Serviços Académicos** — podem introduzir histórico anterior do estudante através da importação (UC-EX1-1).
-- **Sistema StudyMatch** — determina o estado do perfil e atualiza-o quando surgem novas evidências.
+- **Estudante** — realiza testes de nível e consulta o perfil atualizado.
+- **Serviços Académicos** — podem introduzir histórico académico anterior através da importação (UC-EX1-1).
+- **Sistema StudyMatch** — apresenta os testes, regista as respostas, calcula os resultados e atualiza o perfil.
 
----
+## 3. Competências abrangidas
 
-## 3. Casos de Uso
+Os testes de nível abrangem quatro competências:
 
-### UC-CST-1: Consultar Estado do Perfil e Próximos Passos
+1. **Programação**
+2. **Matemática**
+3. **Bases de Dados**
+4. **Engenharia de Software**
 
-**Objetivo:** mostrar ao estudante, de forma honesta, o grau de completude do seu perfil e o que pode fazer para o melhorar. Estende o fluxo A1 de UC-PER-1 (perfil com pouca informação).
+Cada competência tem um teste e um resultado próprios. O estudante pode realizar os testes separadamente.
 
-**Ator primário:** Estudante.
+## 4. Casos de Uso
 
-**Cenário de sucesso principal**
-1. O estudante autentica-se e acede ao seu perfil.
-2. O sistema avalia a quantidade e a diversidade das evidências disponíveis.
-3. O sistema indica o estado do perfil (por exemplo, **em construção**, **parcial** ou **completo**).
-4. O sistema apresenta o contexto de curso (UC-IDE-2) e, apenas para as competências com evidência, o respetivo nível e grau de confiança.
-5. O sistema sugere ações para enriquecer o perfil: preencher a autoavaliação inicial (UC-CST-2), submeter evidências não curriculares ou, quando existe histórico anterior, pedir aos Serviços Académicos a sua importação (UC-EX1-1).
+### UC-CST-1: Consultar Perfil de Competências e Próximos Passos
 
-**Fluxos alternativos / exceção**
-- **A1:** sem qualquer evidência, o perfil mostra apenas o contexto de curso e as sugestões, sem competências nem níveis.
-- **A2:** se o estudante tiver histórico importado, o perfil passa logo a "parcial" e mostra as competências sustentadas por esse histórico.
-- **E1:** se uma fonte de dados estiver indisponível, o sistema mostra o que existe e avisa que a informação pode estar incompleta.
-
-**Regras de negócio**
-- Nunca se atribuem níveis a competências sem evidência.
-- Uma competência com evidência insuficiente pode ser apresentada sem nível definitivo.
-- O estado do perfil é visível para quem o consulta.
-
-### UC-CST-2: Registar Autoavaliação Inicial
-
-**Objetivo:** permitir ao estudante fornecer evidência inicial sobre as suas competências, quando ainda não tem histórico.
+**Objetivo:** apresentar o nível conhecido de cada competência, a origem da informação, o grau de confiança e as ações disponíveis para melhorar o perfil.
 
 **Ator primário:** Estudante.
 
 **Cenário de sucesso principal**
-1. O estudante escolhe completar o seu perfil.
-2. O sistema apresenta um questionário curto sobre competências do catálogo relevantes para o seu curso.
-3. O estudante indica a perceção do seu nível em cada competência que quiser, e pode ignorar as restantes.
-4. O sistema regista as respostas como **autoavaliação**, uma evidência não curricular de peso reduzido.
-5. O perfil é atualizado e mostra essas competências com o respetivo grau de confiança.
+
+1. O estudante acede ao seu perfil.
+2. O sistema consulta as evidências académicas e os resultados dos testes de nível concluídos.
+3. Para cada competência, o sistema determina o nível e o grau de confiança de acordo com a estratégia definida no ADR-004.
+4. O sistema apresenta a origem do nível: notas académicas, teste de nível ou combinação de ambos.
+5. Quando uma competência não tem notas relevantes nem teste concluído, o sistema não inventa um nível e indica que o estudante pode realizar ou retomar o respetivo teste.
+6. O estudante consulta os resultados e identifica as competências com informação em falta ou confiança reduzida.
 
 **Fluxos alternativos / exceção**
-- **A1:** respostas parciais ficam guardadas e o estudante retoma mais tarde.
-- **A2:** o estudante altera as respostas; as versões anteriores ficam no histórico.
-- **E1:** se a gravação falhar, as respostas mantêm-se no ecrã e o estudante pode tentar de novo.
+
+- **A1 — Sem evidências:** o nível da competência é apresentado como indisponível, e não como zero; o sistema sugere realizar ou retomar o teste correspondente.
+- **A2 — Só existem notas:** o nível baseia-se na média académica da competência.
+- **A3 — Só existe teste concluído:** o nível baseia-se no resultado do teste.
+- **A4 — Existem notas e teste concluído:** o sistema combina as duas fontes segundo o ADR-004.
+- **E1 — Informação indisponível:** o sistema informa o estudante e não apresenta um resultado inventado.
 
 **Regras de negócio**
-- A autoavaliação é opcional.
-- O estudante só avalia competências já existentes no catálogo; não cria nem altera competências.
-- A autoavaliação tem menor peso do que qualquer evidência curricular ou validada, e nunca a substitui ou elimina.
-- A autoavaliação não exige validação, mas é identificada como tal no perfil.
+
+- Não se atribui um nível quando não existe qualquer evidência.
+- A ausência de informação não equivale a uma pontuação de zero.
+- A origem do nível e o grau de confiança devem ser apresentados de forma transparente.
+- Os resultados de testes iniciados mas não concluídos não são usados no cálculo do perfil.
+
+### UC-CST-2: Realizar Teste de Nível por Competência
+
+**Objetivo:** obter evidência inicial e comparável do nível do estudante numa das quatro competências.
+
+**Ator primário:** Estudante.
+
+**Pré-condições**
+
+- O estudante está identificado no sistema.
+- O teste da competência escolhida ainda não foi concluído.
+
+**Cenário de sucesso principal**
+
+1. O estudante escolhe uma competência: Programação, Matemática, Bases de Dados ou Engenharia de Software.
+2. O sistema apresenta as regras do teste, incluindo o limite de tempo, a progressão de dificuldade, a opção «Não sei», a ausência de desconto por respostas erradas, o carácter único e definitivo da tentativa e a impossibilidade de voltar a perguntas anteriores.
+3. O sistema apresenta uma pergunta ou problema de cada vez, começando pelo nível mais baixo e aumentando a dificuldade de forma ordenada.
+4. Em Matemática, Bases de Dados e Engenharia de Software, o estudante responde a 20 perguntas de escolha múltipla, uma por nível. Existe uma única resposta correta entre quatro opções, além da opção «Não sei».
+5. Em Programação, o estudante resolve quatro problemas Java de dificuldade crescente. O código é avaliado através de testes.
+6. O estudante responde, escolhe «Não sei» ou deixa terminar o tempo disponível.
+7. Depois de cada item, o sistema avança para o seguinte. Não é possível regressar a um item anterior nem alterar uma resposta submetida.
+8. Quando todos os itens terminam, o sistema calcula e regista o resultado final na escala de 0–20.
+9. O estudante consulta o resultado definitivo, que passa a ser usado no perfil da competência.
+
+**Fluxos alternativos / exceção**
+
+- **A1 — «Não sei»:** o item vale zero e o sistema avança para o seguinte.
+- **A2 — Tempo esgotado:** o item conta como não respondido, vale zero e o sistema avança.
+- **A3 — Sessão interrompida:** o estudante pode retomar a mesma sessão; as respostas já submetidas e os tempos registados não são reiniciados.
+- **A4 — Teste já concluído:** o sistema apresenta o resultado existente e não permite iniciar uma nova tentativa.
+- **E1 — Executor de Programação indisponível:** o sistema informa que o teste de Programação está temporariamente indisponível e não inventa uma pontuação; a falha não consome a tentativa única, pelo que o estudante pode realizar o teste quando o executor estiver novamente disponível.
+- **E2 — Falha durante a gravação:** o sistema informa o estudante e preserva a sessão de forma a permitir a retoma, sem criar uma segunda tentativa.
+
+**Regras de negócio**
+
+- Existe um teste por competência.
+- Cada teste pode ser concluído apenas uma vez; o resultado final é definitivo.
+- Uma sessão em curso pode ser retomada, mas não reiniciada.
+- A dificuldade aumenta por ordem de nível, independentemente das respostas anteriores.
+- Em Matemática, Bases de Dados e Engenharia de Software existe uma variante escolhida para cada um dos 20 níveis.
+- Em Programação existem quatro posições de dificuldade, cada uma com duas variantes possíveis.
+- O estudante pode escolher «Não sei» sem perder pontos já obtidos noutros itens.
+- Não existe desconto adicional por respostas erradas.
+- O sistema não apresenta as respostas corretas durante o teste.
 
 ### UC-CST-3: Atualizar o Perfil com Novas Evidências
 
-**Objetivo:** garantir que, à medida que o estudante progride, as evidências académicas ganham peso sobre a informação inicial e o perfil evolui sem ação manual.
+**Objetivo:** garantir que o perfil reflete automaticamente as notas académicas e os testes de nível concluídos.
 
-**Ator primário:** Sistema (desencadeado por novas evidências).
+**Ator primário:** Sistema.
 
 **Cenário de sucesso principal**
-1. Surge uma nova evidência: um resultado registado, um histórico importado (UC-EX1-1), uma correção aceite (UC-EX2-1) ou uma evidência não curricular validada.
-2. O sistema associa-a às competências relevantes.
-3. O sistema atualiza o grau de confiança e, quando houver evidência suficiente, o nível de cada competência afetada.
-4. Onde existe evidência curricular ou validada, esta pesa mais do que a autoavaliação inicial.
-5. O sistema atualiza o estado do perfil e o estudante vê-o refletido na próxima consulta.
+
+1. É registada uma nova nota académica ou é concluído um teste de nível.
+2. O sistema identifica as competências a que a evidência diz respeito.
+3. O sistema recalcula o nível e o grau de confiança de cada competência afetada.
+4. Se existirem apenas notas, o nível é determinado pela evidência académica.
+5. Se existir apenas um teste concluído, o nível é determinado pelo resultado do teste.
+6. Se existirem notas e teste concluído, o sistema combina as duas fontes segundo o ADR-004.
+7. O perfil passa a apresentar o novo nível, a origem da informação e o grau de confiança na consulta seguinte.
 
 **Fluxos alternativos / exceção**
-- **A1:** se a nova evidência contradiz a autoavaliação, ambas ficam registadas e o perfil reflete as regras de peso, sem penalizar o estudante.
-- **E1:** se a unidade curricular não tiver competências associadas, a evidência fica registada e nenhuma competência é atualizada até a associação existir.
+
+- **A1 — Sem notas nem teste concluído:** o nível permanece indisponível e a confiança é zero.
+- **A2 — Teste iniciado mas não concluído:** a sessão não é considerada evidência para o cálculo do nível.
+- **E1 — A evidência não está associada a competências:** o registo não deve alterar o nível de nenhuma competência até existir uma associação válida.
 
 **Regras de negócio**
-- A atualização é automática.
-- Nenhuma evidência anterior é eliminada; o histórico mantém-se.
+
+- A atualização do perfil é automática.
+- O perfil não deve inventar níveis para competências sem evidência.
+- O nível final, a origem e a confiança seguem a estratégia definida no ADR-004.
+- As notas académicas continuam a ter maior peso do que o resultado do teste quando existem ambas as fontes.
 
 ---
 
-## 4. Estratégia Proposta
+## 5. Resumo funcional dos testes
 
-**Perfil progressivo baseado em evidências, com a autoavaliação como evidência inicial de menor peso e o histórico anterior como a fonte mais fiável.**
+| Competência | Estrutura | Limite de tempo por item |
+|---|---|---|
+| Matemática | 20 níveis, duas variantes por nível; escolha múltipla | 90 segundos |
+| Bases de Dados | 20 níveis, duas variantes por nível; escolha múltipla | 60 segundos |
+| Engenharia de Software | 20 níveis, duas variantes por nível; escolha múltipla | 60 segundos |
+| Programação | Quatro problemas de dificuldade crescente, duas variantes por posição | 10 minutos |
 
-Fontes de informação, da mais para a menos fiável:
+Em todos os testes, o estudante só vê o item atual, não pode voltar atrás e pode escolher «Não sei». A resposta errada, a opção «Não sei» e o tempo esgotado não retiram pontos de outros itens. Os detalhes das fórmulas e da segurança encontram-se no ADR-004.
 
-1. Evidências curriculares: resultados e tentativas da trajetória académica, incluindo histórico importado (UC-EX1-1).
-2. Evidências não curriculares validadas (projetos, certificações, atividades).
-3. Evidências não curriculares ainda não validadas.
-4. Autoavaliação inicial.
-
-O contexto de curso (curso, plano de estudos, ano curricular) é usado como **contexto**, não como prova de competência.
-
-### Alternativas consideradas
+## 6. Alternativas consideradas
 
 | Alternativa | Vantagens | Desvantagens | Decisão |
 |---|---|---|---|
-| **A. Perfil neutro** (nível médio para todos) | Simples; todos têm perfil | Viola a regra de não haver níveis sem evidência; esconde diferenças reais | Rejeitada |
-| **B. Aguardar histórico** (sem grupos até haver dados) | Nunca usa dados duvidosos | Exclui os primeiros anos do valor do produto; adia o problema | Rejeitada |
-| **C. Autoavaliação inicial** | Informação imediata; envolve o estudante | Subjetiva, sujeita a sobre ou subestimação | **Escolhida**, com peso reduzido |
-| **D. Importação de histórico anterior** (UC-EX1-1) | Mais objetiva; evita registo manual | Depende dos Serviços Académicos e de dados disponíveis | **Escolhida**, como fonte principal quando existir |
-| **E. Inferir pelo plano de estudos** | Sem esforço do estudante | Presume o que o estudante ainda não demonstrou | Só como contexto |
+| Manter a autoavaliação de 1–5 | Simples e rápida | Subjetiva, suscetível a sobrestimação e pouco comparável | Rejeitada |
+| Esperar pelas primeiras notas | Baseia-se em resultados académicos | Deixa estudantes sem histórico sem nível inicial | Rejeitada |
+| Usar perguntas sempre da mesma dificuldade | Simples de organizar | Distingue pior estudantes de níveis diferentes | Rejeitada |
+| Testes com dificuldade crescente e tempo limitado | Produzem evidência de desempenho em vários níveis | Exigem um banco de perguntas revisto e regras de tempo claras | Escolhida |
+| Permitir tentativas ilimitadas | Permite praticar | Reduz a comparabilidade do resultado | Rejeitada |
 
-**Justificação:** C e D respeitam a regra de não inventar níveis, dão valor desde o primeiro dia e tornam a incerteza visível através do grau de confiança. A progressão automática (UC-CST-3) faz o *cold start* desaparecer à medida que o histórico cresce.
+## 7. Conceitos de domínio relevantes
 
-## 5. Comportamento com Histórico Parcial
+- **Teste de nível** — avaliação destinada a estimar uma competência.
+- **Sessão de teste** — realização de um teste por um estudante numa competência.
+- **Pergunta ou problema** — item apresentado durante o teste.
+- **Variante** — versão alternativa de um item do mesmo nível ou posição de dificuldade.
+- **Resposta** — resposta submetida pelo estudante, incluindo a opção «Não sei» ou uma submissão de código.
+- **Resultado do teste** — pontuação final, na escala de 0–20.
+- **Grau de confiança** — indicador calculado a partir da quantidade de evidências académicas e da existência de um teste concluído.
+- **Origem do nível** — notas académicas, teste de nível ou combinação de ambos.
 
-| Situação | Estado do perfil | Comportamento |
-|---|---|---|
-| Sem evidências | Em construção | Só contexto de curso e sugestões |
-| Só autoavaliação | Parcial (confiança baixa) | Competências com peso reduzido, identificadas como autoavaliação |
-| Histórico importado ou algumas UCs concluídas | Parcial | Competências sustentadas por resultados com maior confiança; as restantes mantêm a autoavaliação |
-| Várias UCs, atividades e evidências validadas | Completo | A evidência curricular domina; a autoavaliação torna-se secundária |
+## 8. Assunções
 
-A transição é gradual e contínua, sem salto nem ação manual.
-
-## 6. Conceitos de Domínio Revelados
-
-- **Estado do Perfil** — indicador de completude (em construção, parcial, completo); a confirmar se é um conceito ou apenas uma visão derivada.
-- **Autoavaliação** — nova modalidade de evidência não curricular, de peso reduzido e sem validação.
-- **Questionário de Autoavaliação** — conjunto de competências a que o estudante responde.
-- **Grau de Confiança**, **Evidência Curricular**, **Evidência Não Curricular** e **Validação de Evidência** — conceitos já definidos no perfil.
-
-## 7. Assunções
-
-- Existe um catálogo de competências e as associações entre competências e unidades curriculares (UC-COM).
-- O estudante pode preencher a autoavaliação no primeiro acesso ou mais tarde.
-- A autoavaliação é um tipo de evidência não curricular, o que implica atualizar essa classificação no modelo de domínio.
-
-## 8. Questões em Aberto
-
-- Quais os critérios para os estados "em construção", "parcial" e "completo"?
-- Como se pondera a autoavaliação face às restantes evidências (matching, sprints futuros)?
-- A autoavaliação deve ser reconfirmada periodicamente?
-- O docente ou os Serviços Académicos devem ver a autoavaliação de um estudante, ou apenas evidências curriculares e validadas?
-- Como tratar estudantes que ingressam com equivalências ou creditações, que o perfil deixa fora do Sprint 1?
-- A importação (UC-EX1-1) deve poder criar também estudantes novos, como aponta o `extra-1.md`?
+- O catálogo de competências contém as quatro competências indicadas.
+- Cada teste é independente e pode ser realizado separadamente.
+- A estratégia de pontuação, os limites de tempo e a confiança são os definidos no ADR-004.
+- A autoavaliação de 1–5 deixa de ser usada no novo cálculo de *cold start*. Os dados antigos não são apagados por esta mudança.
+- A implementação técnica das sessões, dos bancos de perguntas e do executor de código é definida nas issues de implementação do Sprint 3.

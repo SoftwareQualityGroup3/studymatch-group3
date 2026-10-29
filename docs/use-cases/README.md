@@ -16,9 +16,9 @@ Este documento consolida o modelo de casos de uso do StudyMatch, servindo como �
 | **Sistema de Competências** | **UC-COM-1** | Definir Competência | Criar e descrever uma nova competência no catálogo administrativo. | [competencias.md](./competencias.md) |
 | | **UC-COM-2** | Associar Competência a Unidade Curricular | Associar competências a unidades curriculares com respetivos pesos. | [competencias.md](./competencias.md) |
 | | **UC-COM-3** | Associar Competência a Evidência Não Curricular| Permitir que projetos ou atividades alimentem competências. | [competencias.md](./competencias.md) |
-| **Cold Start** | **UC-CST-1** | Consultar Estado do Perfil e Próximos Passos | Mostrar o grau de completude do perfil e sugestões de melhoria inicial. | [cold-start.md](./cold-start.md) |
-| | **UC-CST-2** | Registar Autoavaliação Inicial | Permitir ao estudante fornecer evidência inicial por questionário. | [cold-start.md](./cold-start.md) |
-| | **UC-CST-3** | Atualizar o Perfil com Novas Evidências | Evoluir o perfil de forma automática à medida que surgem novas evidências. | [cold-start.md](./cold-start.md) |
+| **Cold Start** | **UC-CST-1** | Consultar Perfil de Competências e Próximos Passos | Apresentar nível, origem, confiança e ações para melhorar o perfil. | [cold-start.md](./cold-start.md) |
+| | **UC-CST-2** | Realizar Teste de Nível por Competência | Obter evidência inicial através de um teste com dificuldade crescente e tempo limitado. | [cold-start.md](./cold-start.md) |
+| | **UC-CST-3** | Atualizar o Perfil com Novas Evidências | Recalcular o perfil quando surgem notas académicas ou testes concluídos. | [cold-start.md](./cold-start.md) |
 | **Contexto de Agrupamento** | **UC-GRP-1** | Definir Contexto de Agrupamento | Configurar parâmetros, tamanho alvo e restrições para futuros grupos. | [contexto-agrupamento.md](./contexto-agrupamento.md) |
 | | **UC-GRP-2** | Consultar Contexto de Agrupamento | Consultar os contextos de agrupamento ativos ou passados. | [contexto-agrupamento.md](./contexto-agrupamento.md) |
 | **Valor Acrescentado** | **UC-EX1-1** | Importar Histórico Académico | Importação em lote de dados académicos pré-existentes via CSV. | [extra-1.md](./extra-1.md) |
