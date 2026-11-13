@@ -1,0 +1,1144 @@
+{
+  "competency": "DATABASES",
+  "questions": [
+    {
+      "id": "databases-l01-v01",
+      "competency": "DATABASES",
+      "level": 1,
+      "variant": 1,
+      "type": "QUERY_RESULT",
+      "statement": "STUDENT(id, name) contém (1,'Ana') e (2,'Bruno'). Qual é o resultado?",
+      "options": [
+        {"id": "A", "text": "Ana"},
+        {"id": "B", "text": "Bruno"},
+        {"id": "C", "text": "1"},
+        {"id": "D", "text": "Nenhuma linha"}
+      ],
+      "correctOption": "B",
+      "explanation": "A condição id = 2 seleciona Bruno.",
+      "verification": {
+        "tables": [
+          {
+            "name": "student",
+            "columns": [{"name": "id", "type": "INT"}, {"name": "name", "type": "VARCHAR(50)"}],
+            "rows": [[1, "Ana"], [2, "Bruno"]]
+          }
+        ],
+        "query": "SELECT name FROM {{student}} WHERE id = 2",
+        "expectedResult": [["Bruno"]]
+      }
+    },
+    {
+      "id": "databases-l01-v02",
+      "competency": "DATABASES",
+      "level": 1,
+      "variant": 2,
+      "type": "QUERY_RESULT",
+      "statement": "COURSE(id, name) contém (10,'BD') e (20,'POO'). Qual é o resultado?",
+      "options": [
+        {"id": "A", "text": "BD"},
+        {"id": "B", "text": "POO"},
+        {"id": "C", "text": "10"},
+        {"id": "D", "text": "Nenhuma linha"}
+      ],
+      "correctOption": "A",
+      "explanation": "A condição id = 10 seleciona BD.",
+      "verification": {
+        "tables": [
+          {
+            "name": "course",
+            "columns": [{"name": "id", "type": "INT"}, {"name": "name", "type": "VARCHAR(50)"}],
+            "rows": [[10, "BD"], [20, "POO"]]
+          }
+        ],
+        "query": "SELECT name FROM {{course}} WHERE id = 10",
+        "expectedResult": [["BD"]]
+      }
+    },
+
+    {
+      "id": "databases-l02-v01",
+      "competency": "DATABASES",
+      "level": 2,
+      "variant": 1,
+      "type": "FIND_ERROR",
+      "statement": "Qual é a forma correta de procurar valores NULL?",
+      "options": [
+        {"id": "A", "text": "WHERE value IS NULL"},
+        {"id": "B", "text": "WHERE value = NULL"},
+        {"id": "C", "text": "WHERE value == NULL"},
+        {"id": "D", "text": "WHERE value NULL"}
+      ],
+      "correctOption": "A",
+      "explanation": "NULL deve ser comparado com IS NULL.",
+      "verification": {
+        "tables": [
+          {
+            "name": "item",
+            "columns": [{"name": "id", "type": "INT"}, {"name": "value", "type": "VARCHAR(50)"}],
+            "rows": [[1, null], [2, "x"]]
+          }
+        ],
+        "query": "SELECT id FROM {{item}} WHERE value IS NULL",
+        "expectedResult": [[1]]
+      }
+    },
+    {
+      "id": "databases-l02-v02",
+      "competency": "DATABASES",
+      "level": 2,
+      "variant": 2,
+      "type": "FIND_ERROR",
+      "statement": "Qual é a forma correta de procurar valores que não são NULL?",
+      "options": [
+        {"id": "A", "text": "WHERE value IS NOT NULL"},
+        {"id": "B", "text": "WHERE value <> NULL"},
+        {"id": "C", "text": "WHERE value != NULL"},
+        {"id": "D", "text": "WHERE NOT value"}
+      ],
+      "correctOption": "A",
+      "explanation": "A forma correta é IS NOT NULL.",
+      "verification": {
+        "tables": [
+          {
+            "name": "item",
+            "columns": [{"name": "id", "type": "INT"}, {"name": "value", "type": "VARCHAR(50)"}],
+            "rows": [[1, null], [2, "x"]]
+          }
+        ],
+        "query": "SELECT id FROM {{item}} WHERE value IS NOT NULL",
+        "expectedResult": [[2]]
+      }
+    },
+
+    {
+      "id": "databases-l03-v01",
+      "competency": "DATABASES",
+      "level": 3,
+      "variant": 1,
+      "type": "CORRECT_QUERY",
+      "statement": "Qual consulta seleciona idades entre 18 e 22, inclusive?",
+      "options": [
+        {"id": "A", "text": "WHERE age > 18 AND age < 22"},
+        {"id": "B", "text": "WHERE age BETWEEN 18 AND 22"},
+        {"id": "C", "text": "WHERE age IN 18 TO 22"},
+        {"id": "D", "text": "WHERE age = 18 OR 22"}
+      ],
+      "correctOption": "B",
+      "explanation": "BETWEEN inclui os dois limites.",
+      "verification": {
+        "tables": [
+          {
+            "name": "student",
+            "columns": [{"name": "id", "type": "INT"}, {"name": "age", "type": "INT"}],
+            "rows": [[1, 17], [2, 18], [3, 22], [4, 23]]
+          }
+        ],
+        "query": "SELECT id FROM {{student}} WHERE age BETWEEN 18 AND 22 ORDER BY id",
+        "expectedResult": [[2], [3]]
+      }
+    },
+    {
+      "id": "databases-l03-v02",
+      "competency": "DATABASES",
+      "level": 3,
+      "variant": 2,
+      "type": "CORRECT_QUERY",
+      "statement": "Qual consulta seleciona preços superiores a 100?",
+      "options": [
+        {"id": "A", "text": "WHERE price >= 100"},
+        {"id": "B", "text": "WHERE price > 100"},
+        {"id": "C", "text": "WHERE price AFTER 100"},
+        {"id": "D", "text": "HAVING price > 100"}
+      ],
+      "correctOption": "B",
+      "explanation": "Superior a 100 significa maior que 100.",
+      "verification": {
+        "tables": [
+          {
+            "name": "product",
+            "columns": [{"name": "id", "type": "INT"}, {"name": "price", "type": "INT"}],
+            "rows": [[1, 100], [2, 101], [3, 200]]
+          }
+        ],
+        "query": "SELECT id FROM {{product}} WHERE price > 100 ORDER BY id",
+        "expectedResult": [[2], [3]]
+      }
+    },
+
+    {
+      "id": "databases-l04-v01",
+      "competency": "DATABASES",
+      "level": 4,
+      "variant": 1,
+      "type": "QUERY_RESULT",
+      "statement": "Quantas inscrições existem para o estudante 1?",
+      "options": [
+        {"id": "A", "text": "0"},
+        {"id": "B", "text": "1"},
+        {"id": "C", "text": "2"},
+        {"id": "D", "text": "3"}
+      ],
+      "correctOption": "C",
+      "explanation": "O estudante 1 aparece em duas inscrições.",
+      "verification": {
+        "tables": [
+          {
+            "name": "enrollment",
+            "columns": [{"name": "student_id", "type": "INT"}, {"name": "course_id", "type": "INT"}],
+            "rows": [[1, 10], [1, 20], [2, 10]]
+          }
+        ],
+        "query": "SELECT COUNT(*) FROM {{enrollment}} WHERE student_id = 1",
+        "expectedResult": [[2]]
+      }
+    },
+    {
+      "id": "databases-l04-v02",
+      "competency": "DATABASES",
+      "level": 4,
+      "variant": 2,
+      "type": "QUERY_RESULT",
+      "statement": "Qual é a soma das quantidades da encomenda 100?",
+      "options": [
+        {"id": "A", "text": "2"},
+        {"id": "B", "text": "3"},
+        {"id": "C", "text": "5"},
+        {"id": "D", "text": "6"}
+      ],
+      "correctOption": "C",
+      "explanation": "A soma é 2 + 3 = 5.",
+      "verification": {
+        "tables": [
+          {
+            "name": "order_line",
+            "columns": [{"name": "order_id", "type": "INT"}, {"name": "quantity", "type": "INT"}],
+            "rows": [[100, 2], [100, 3], [101, 1]]
+          }
+        ],
+        "query": "SELECT SUM(quantity) FROM {{order_line}} WHERE order_id = 100",
+        "expectedResult": [[5]]
+      }
+    },
+
+    {
+      "id": "databases-l05-v01",
+      "competency": "DATABASES",
+      "level": 5,
+      "variant": 1,
+      "type": "FIND_ERROR",
+      "statement": "Uma foreign key student_id referencia STUDENT(id). O que acontece ao inserir um estudante inexistente?",
+      "options": [
+        {"id": "A", "text": "A inserção viola a integridade referencial"},
+        {"id": "B", "text": "O estudante é criado automaticamente"},
+        {"id": "C", "text": "A foreign key é ignorada"},
+        {"id": "D", "text": "A chave primária é alterada"}
+      ],
+      "correctOption": "A",
+      "explanation": "Uma foreign key deve referenciar uma linha existente.",
+      "verification": {
+        "tables": [
+          {
+            "name": "student",
+            "columns": [{"name": "id", "type": "INT"}],
+            "rows": [[1], [2]]
+          }
+        ],
+        "query": "SELECT id FROM {{student}} WHERE id = 99",
+        "expectedResult": []
+      }
+    },
+    {
+      "id": "databases-l05-v02",
+      "competency": "DATABASES",
+      "level": 5,
+      "variant": 2,
+      "type": "FIND_ERROR",
+      "statement": "Qual é a finalidade de uma chave primária?",
+      "options": [
+        {"id": "A", "text": "Identificar unicamente cada linha"},
+        {"id": "B", "text": "Permitir NULL em todas as linhas"},
+        {"id": "C", "text": "Duplicar linhas automaticamente"},
+        {"id": "D", "text": "Ordenar sempre a tabela"}
+      ],
+      "correctOption": "A",
+      "explanation": "A primary key identifica unicamente cada registo.",
+      "verification": {
+        "tables": [
+          {
+            "name": "student",
+            "columns": [{"name": "id", "type": "INT"}, {"name": "name", "type": "VARCHAR(50)"}],
+            "rows": [[1, "Ana"], [2, "Bruno"]]
+          }
+        ],
+        "query": "SELECT COUNT(DISTINCT id) FROM {{student}}",
+        "expectedResult": [[2]]
+      }
+    },
+
+    {
+      "id": "databases-l06-v01",
+      "competency": "DATABASES",
+      "level": 6,
+      "variant": 1,
+      "type": "QUERY_RESULT",
+      "statement": "Qual é o resultado do JOIN entre STUDENT e ENROLLMENT?",
+      "options": [
+        {"id": "A", "text": "Ana, BD"},
+        {"id": "B", "text": "Bruno, POO"},
+        {"id": "C", "text": "Bruno, BD"},
+        {"id": "D", "text": "Nenhuma linha"}
+      ],
+      "correctOption": "B",
+      "explanation": "O estudante 2 é Bruno e está inscrito em POO.",
+      "verification": {
+        "tables": [
+          {
+            "name": "student",
+            "columns": [{"name": "id", "type": "INT"}, {"name": "name", "type": "VARCHAR(50)"}],
+            "rows": [[1, "Ana"], [2, "Bruno"]]
+          },
+          {
+            "name": "enrollment",
+            "columns": [{"name": "student_id", "type": "INT"}, {"name": "course", "type": "VARCHAR(50)"}],
+            "rows": [[1, "BD"], [2, "POO"]]
+          }
+        ],
+        "query": "SELECT s.name, e.course FROM {{student}} s JOIN {{enrollment}} e ON s.id = e.student_id WHERE s.id = 2",
+        "expectedResult": [["Bruno", "POO"]]
+      }
+    },
+    {
+      "id": "databases-l06-v02",
+      "competency": "DATABASES",
+      "level": 6,
+      "variant": 2,
+      "type": "QUERY_RESULT",
+      "statement": "Qual é o livro associado ao autor 1?",
+      "options": [
+        {"id": "A", "text": "Autor A, Livro X"},
+        {"id": "B", "text": "Autor A, Livro Y"},
+        {"id": "C", "text": "Autor B, Livro X"},
+        {"id": "D", "text": "Nenhuma linha"}
+      ],
+      "correctOption": "A",
+      "explanation": "O livro X referencia o autor 1.",
+      "verification": {
+        "tables": [
+          {
+            "name": "author",
+            "columns": [{"name": "id", "type": "INT"}, {"name": "name", "type": "VARCHAR(50)"}],
+            "rows": [[1, "Autor A"], [2, "Autor B"]]
+          },
+          {
+            "name": "book",
+            "columns": [{"name": "author_id", "type": "INT"}, {"name": "title", "type": "VARCHAR(50)"}],
+            "rows": [[1, "Livro X"], [2, "Livro Y"]]
+          }
+        ],
+        "query": "SELECT a.name, b.title FROM {{author}} a JOIN {{book}} b ON a.id = b.author_id WHERE a.id = 1",
+        "expectedResult": [["Autor A", "Livro X"]]
+      }
+    },
+
+    {
+      "id": "databases-l07-v01",
+      "competency": "DATABASES",
+      "level": 7,
+      "variant": 1,
+      "type": "CORRECT_QUERY",
+      "statement": "Qual consulta conta inscrições por unidade curricular?",
+      "options": [
+        {"id": "A", "text": "SELECT course_id, COUNT(*) GROUP BY course_id"},
+        {"id": "B", "text": "SELECT course_id, COUNT(*) FROM enrollment"},
+        {"id": "C", "text": "SELECT COUNT(course_id) GROUP BY student_id"},
+        {"id": "D", "text": "SELECT course_id COUNT(*)"}
+      ],
+      "correctOption": "A",
+      "explanation": "É necessário agrupar por course_id.",
+      "verification": {
+        "tables": [
+          {
+            "name": "enrollment",
+            "columns": [{"name": "course_id", "type": "INT"}],
+            "rows": [[10], [10], [20]]
+          }
+        ],
+        "query": "SELECT course_id, COUNT(*) FROM {{enrollment}} GROUP BY course_id ORDER BY course_id",
+        "expectedResult": [[10, 2], [20, 1]]
+      }
+    },
+    {
+      "id": "databases-l07-v02",
+      "competency": "DATABASES",
+      "level": 7,
+      "variant": 2,
+      "type": "CORRECT_QUERY",
+      "statement": "Qual consulta calcula o total vendido por produto?",
+      "options": [
+        {"id": "A", "text": "SELECT product_id, SUM(amount) GROUP BY product_id"},
+        {"id": "B", "text": "SELECT product_id, amount GROUP BY amount"},
+        {"id": "C", "text": "SELECT SUM(product_id), amount"},
+        {"id": "D", "text": "SELECT product_id TOTAL amount"}
+      ],
+      "correctOption": "A",
+      "explanation": "SUM(amount) deve ser agrupado por product_id.",
+      "verification": {
+        "tables": [
+          {
+            "name": "sale",
+            "columns": [{"name": "product_id", "type": "INT"}, {"name": "amount", "type": "INT"}],
+            "rows": [[1, 10], [1, 15], [2, 20]]
+          }
+        ],
+        "query": "SELECT product_id, SUM(amount) FROM {{sale}} GROUP BY product_id ORDER BY product_id",
+        "expectedResult": [[1, 25], [2, 20]]
+      }
+    },
+
+    {
+      "id": "databases-l08-v01",
+      "competency": "DATABASES",
+      "level": 8,
+      "variant": 1,
+      "type": "QUERY_RESULT",
+      "statement": "Qual é o resultado do COUNT por equipa?",
+      "options": [
+        {"id": "A", "text": "(1,1) e (2,2)"},
+        {"id": "B", "text": "(1,2) e (2,1)"},
+        {"id": "C", "text": "(1,3)"},
+        {"id": "D", "text": "(2,3)"}
+      ],
+      "correctOption": "B",
+      "explanation": "A equipa 1 tem dois jogadores e a equipa 2 tem um.",
+      "verification": {
+        "tables": [
+          {
+            "name": "player",
+            "columns": [{"name": "team_id", "type": "INT"}],
+            "rows": [[1], [1], [2]]
+          }
+        ],
+        "query": "SELECT team_id, COUNT(*) FROM {{player}} GROUP BY team_id ORDER BY team_id",
+        "expectedResult": [[1, 2], [2, 1]]
+      }
+    },
+    {
+      "id": "databases-l08-v02",
+      "competency": "DATABASES",
+      "level": 8,
+      "variant": 2,
+      "type": "QUERY_RESULT",
+      "statement": "Qual é o total pago por cada cliente?",
+      "options": [
+        {"id": "A", "text": "(1,25) e (2,20)"},
+        {"id": "B", "text": "(1,10) e (2,20)"},
+        {"id": "C", "text": "(1,15) e (2,20)"},
+        {"id": "D", "text": "(1,45)"}
+      ],
+      "correctOption": "A",
+      "explanation": "Os pagamentos do cliente 1 somam 25.",
+      "verification": {
+        "tables": [
+          {
+            "name": "payment",
+            "columns": [{"name": "customer_id", "type": "INT"}, {"name": "amount", "type": "INT"}],
+            "rows": [[1, 10], [1, 15], [2, 20]]
+          }
+        ],
+        "query": "SELECT customer_id, SUM(amount) FROM {{payment}} GROUP BY customer_id ORDER BY customer_id",
+        "expectedResult": [[1, 25], [2, 20]]
+      }
+    },
+
+    {
+      "id": "databases-l09-v01",
+      "competency": "DATABASES",
+      "level": 9,
+      "variant": 1,
+      "type": "FIND_ERROR",
+      "statement": "Para contar inscrições por curso, qual deve ser a cláusula GROUP BY?",
+      "options": [
+        {"id": "A", "text": "GROUP BY course_id"},
+        {"id": "B", "text": "GROUP BY student_id"},
+        {"id": "C", "text": "GROUP BY COUNT(*)"},
+        {"id": "D", "text": "Não usar GROUP BY"}
+      ],
+      "correctOption": "A",
+      "explanation": "A dimensão pretendida é course_id.",
+      "verification": {
+        "tables": [
+          {
+            "name": "enrollment",
+            "columns": [{"name": "course_id", "type": "INT"}],
+            "rows": [[10], [10], [20]]
+          }
+        ],
+        "query": "SELECT course_id, COUNT(*) FROM {{enrollment}} GROUP BY course_id",
+        "expectedResult": [[10, 2], [20, 1]]
+      }
+    },
+    {
+      "id": "databases-l09-v02",
+      "competency": "DATABASES",
+      "level": 9,
+      "variant": 2,
+      "type": "FIND_ERROR",
+      "statement": "Para calcular a média salarial por departamento, qual coluna deve ser usada no GROUP BY?",
+      "options": [
+        {"id": "A", "text": "department"},
+        {"id": "B", "text": "employee_id"},
+        {"id": "C", "text": "AVG(salary)"},
+        {"id": "D", "text": "salary apenas"}
+      ],
+      "correctOption": "A",
+      "explanation": "A média deve ser calculada por departamento.",
+      "verification": {
+        "tables": [
+          {
+            "name": "employee",
+            "columns": [{"name": "department", "type": "VARCHAR(50)"}, {"name": "salary", "type": "INT"}],
+            "rows": [["IT", 1000], ["IT", 2000], ["HR", 1500]]
+          }
+        ],
+        "query": "SELECT department, AVG(salary) FROM {{employee}} GROUP BY department ORDER BY department",
+        "expectedResult": [["HR", 1500.0], ["IT", 1500.0]]
+      }
+    },
+
+    {
+      "id": "databases-l10-v01",
+      "competency": "DATABASES",
+      "level": 10,
+      "variant": 1,
+      "type": "CORRECT_QUERY",
+      "statement": "Qual consulta devolve cursos com pelo menos três estudantes?",
+      "options": [
+        {"id": "A", "text": "GROUP BY course_id HAVING COUNT(*) >= 3"},
+        {"id": "B", "text": "WHERE COUNT(*) >= 3"},
+        {"id": "C", "text": "HAVING COUNT(*) >= 3 sem GROUP BY"},
+        {"id": "D", "text": "GROUP BY student_id HAVING COUNT(*) >= 3"}
+      ],
+      "correctOption": "A",
+      "explanation": "HAVING filtra grupos depois da agregação.",
+      "verification": {
+        "tables": [
+          {
+            "name": "enrollment",
+            "columns": [{"name": "course_id", "type": "INT"}],
+            "rows": [[10], [10], [10], [20]]
+          }
+        ],
+        "query": "SELECT course_id FROM {{enrollment}} GROUP BY course_id HAVING COUNT(*) >= 3",
+        "expectedResult": [[10]]
+      }
+    },
+    {
+      "id": "databases-l10-v02",
+      "competency": "DATABASES",
+      "level": 10,
+      "variant": 2,
+      "type": "CORRECT_QUERY",
+      "statement": "Qual consulta devolve clientes cujo total excede 100?",
+      "options": [
+        {"id": "A", "text": "GROUP BY customer_id HAVING SUM(total) > 100"},
+        {"id": "B", "text": "WHERE SUM(total) > 100"},
+        {"id": "C", "text": "GROUP BY total HAVING customer_id > 100"},
+        {"id": "D", "text": "WHERE total > 100 GROUP BY SUM(total)"}
+      ],
+      "correctOption": "A",
+      "explanation": "SUM é calculado por cliente e filtrado com HAVING.",
+      "verification": {
+        "tables": [
+          {
+            "name": "customer_order",
+            "columns": [{"name": "customer_id", "type": "INT"}, {"name": "total", "type": "INT"}],
+            "rows": [[1, 60], [1, 50], [2, 90]]
+          }
+        ],
+        "query": "SELECT customer_id FROM {{customer_order}} GROUP BY customer_id HAVING SUM(total) > 100",
+        "expectedResult": [[1]]
+      }
+    },
+
+    {
+      "id": "databases-l11-v01",
+      "competency": "DATABASES",
+      "level": 11,
+      "variant": 1,
+      "type": "QUERY_RESULT",
+      "statement": "O que devolve um LEFT JOIN entre STUDENT e ENROLLMENT?",
+      "options": [
+        {"id": "A", "text": "(1,1) e (2,NULL)"},
+        {"id": "B", "text": "Apenas (1,1)"},
+        {"id": "C", "text": "(1,NULL) e (2,2)"},
+        {"id": "D", "text": "Nenhuma linha"}
+      ],
+      "correctOption": "A",
+      "explanation": "LEFT JOIN mantém estudantes sem inscrição.",
+      "verification": {
+        "tables": [
+          {
+            "name": "student",
+            "columns": [{"name": "id", "type": "INT"}],
+            "rows": [[1], [2]]
+          },
+          {
+            "name": "enrollment",
+            "columns": [{"name": "student_id", "type": "INT"}],
+            "rows": [[1]]
+          }
+        ],
+        "query": "SELECT s.id, e.student_id FROM {{student}} s LEFT JOIN {{enrollment}} e ON s.id = e.student_id ORDER BY s.id",
+        "expectedResult": [[1, 1], [2, null]]
+      }
+    },
+    {
+      "id": "databases-l11-v02",
+      "competency": "DATABASES",
+      "level": 11,
+      "variant": 2,
+      "type": "QUERY_RESULT",
+      "statement": "O que devolve um LEFT JOIN entre CUSTOMER e ORDER_TABLE?",
+      "options": [
+        {"id": "A", "text": "(1,1) e (2,NULL)"},
+        {"id": "B", "text": "Apenas (1,1)"},
+        {"id": "C", "text": "(1,NULL) e (2,2)"},
+        {"id": "D", "text": "Apenas (2,NULL)"}
+      ],
+      "correctOption": "A",
+      "explanation": "O cliente sem encomendas também é mantido.",
+      "verification": {
+        "tables": [
+          {
+            "name": "customer",
+            "columns": [{"name": "id", "type": "INT"}],
+            "rows": [[1], [2]]
+          },
+          {
+            "name": "order_table",
+            "columns": [{"name": "customer_id", "type": "INT"}],
+            "rows": [[1]]
+          }
+        ],
+        "query": "SELECT c.id, o.customer_id FROM {{customer}} c LEFT JOIN {{order_table}} o ON c.id = o.customer_id ORDER BY c.id",
+        "expectedResult": [[1, 1], [2, null]]
+      }
+    },
+
+    {
+      "id": "databases-l12-v01",
+      "competency": "DATABASES",
+      "level": 12,
+      "variant": 1,
+      "type": "FIND_ERROR",
+      "statement": "Como encontrar estudantes sem inscrições?",
+      "options": [
+        {"id": "A", "text": "LEFT JOIN e WHERE e.student_id IS NULL"},
+        {"id": "B", "text": "INNER JOIN e WHERE e.student_id IS NULL"},
+        {"id": "C", "text": "LEFT JOIN e WHERE s.id IS NULL"},
+        {"id": "D", "text": "CROSS JOIN"}
+      ],
+      "correctOption": "A",
+      "explanation": "As colunas da tabela direita ficam NULL quando não há correspondência.",
+      "verification": {
+        "tables": [
+          {
+            "name": "student",
+            "columns": [{"name": "id", "type": "INT"}],
+            "rows": [[1], [2]]
+          },
+          {
+            "name": "enrollment",
+            "columns": [{"name": "student_id", "type": "INT"}],
+            "rows": [[1]]
+          }
+        ],
+        "query": "SELECT s.id FROM {{student}} s LEFT JOIN {{enrollment}} e ON s.id = e.student_id WHERE e.student_id IS NULL",
+        "expectedResult": [[2]]
+      }
+    },
+    {
+      "id": "databases-l12-v02",
+      "competency": "DATABASES",
+      "level": 12,
+      "variant": 2,
+      "type": "FIND_ERROR",
+      "statement": "Como encontrar produtos sem avaliações?",
+      "options": [
+        {"id": "A", "text": "LEFT JOIN e WHERE review.product_id IS NULL"},
+        {"id": "B", "text": "INNER JOIN e WHERE review.product_id IS NULL"},
+        {"id": "C", "text": "WHERE product.id IS NULL"},
+        {"id": "D", "text": "CROSS JOIN"}
+      ],
+      "correctOption": "A",
+      "explanation": "Produtos sem avaliações têm NULL nas colunas da tabela REVIEW.",
+      "verification": {
+        "tables": [
+          {
+            "name": "product",
+            "columns": [{"name": "id", "type": "INT"}],
+            "rows": [[1], [2]]
+          },
+          {
+            "name": "review",
+            "columns": [{"name": "product_id", "type": "INT"}],
+            "rows": [[1]]
+          }
+        ],
+        "query": "SELECT p.id FROM {{product}} p LEFT JOIN {{review}} r ON p.id = r.product_id WHERE r.product_id IS NULL",
+        "expectedResult": [[2]]
+      }
+    },
+
+    {
+      "id": "databases-l13-v01",
+      "competency": "DATABASES",
+      "level": 13,
+      "variant": 1,
+      "type": "CORRECT_QUERY",
+      "statement": "Qual consulta devolve empregados com salário superior à média?",
+      "options": [
+        {"id": "A", "text": "salary > (SELECT AVG(salary) FROM EMPLOYEE)"},
+        {"id": "B", "text": "salary > AVG(salary)"},
+        {"id": "C", "text": "HAVING salary > AVG(salary)"},
+        {"id": "D", "text": "salary > SELECT AVG(salary)"}
+      ],
+      "correctOption": "A",
+      "explanation": "A média é calculada numa subquery.",
+      "verification": {
+        "tables": [
+          {
+            "name": "employee",
+            "columns": [{"name": "id", "type": "INT"}, {"name": "salary", "type": "INT"}],
+            "rows": [[1, 1000], [2, 2000], [3, 3000]]
+          }
+        ],
+        "query": "SELECT id FROM {{employee}} WHERE salary > (SELECT AVG(salary) FROM {{employee}}) ORDER BY id",
+        "expectedResult": [[3]]
+      }
+    },
+    {
+      "id": "databases-l13-v02",
+      "competency": "DATABASES",
+      "level": 13,
+      "variant": 2,
+      "type": "CORRECT_QUERY",
+      "statement": "Qual consulta devolve produtos mais caros que o preço médio?",
+      "options": [
+        {"id": "A", "text": "price > (SELECT AVG(price) FROM PRODUCT)"},
+        {"id": "B", "text": "price > AVG(price)"},
+        {"id": "C", "text": "HAVING price > AVG(price)"},
+        {"id": "D", "text": "price > AVG PRODUCT"}
+      ],
+      "correctOption": "A",
+      "explanation": "A média deve ser calculada por uma subquery.",
+      "verification": {
+        "tables": [
+          {
+            "name": "product",
+            "columns": [{"name": "id", "type": "INT"}, {"name": "price", "type": "INT"}],
+            "rows": [[1, 10], [2, 20], [3, 30]]
+          }
+        ],
+        "query": "SELECT id FROM {{product}} WHERE price > (SELECT AVG(price) FROM {{product}}) ORDER BY id",
+        "expectedResult": [[3]]
+      }
+    },
+
+    {
+      "id": "databases-l14-v01",
+      "competency": "DATABASES",
+      "level": 14,
+      "variant": 1,
+      "type": "QUERY_RESULT",
+      "statement": "Quais estudantes têm média igual ou superior a 15?",
+      "options": [
+        {"id": "A", "text": "Apenas 1"},
+        {"id": "B", "text": "Apenas 2"},
+        {"id": "C", "text": "1 e 2"},
+        {"id": "D", "text": "Nenhum"}
+      ],
+      "correctOption": "C",
+      "explanation": "Ambos têm média 15.",
+      "verification": {
+        "tables": [
+          {
+            "name": "grade",
+            "columns": [{"name": "student_id", "type": "INT"}, {"name": "value", "type": "INT"}],
+            "rows": [[1, 10], [1, 20], [2, 15]]
+          }
+        ],
+        "query": "SELECT student_id FROM {{grade}} GROUP BY student_id HAVING AVG(value) >= 15 ORDER BY student_id",
+        "expectedResult": [[1], [2]]
+      }
+    },
+    {
+      "id": "databases-l14-v02",
+      "competency": "DATABASES",
+      "level": 14,
+      "variant": 2,
+      "type": "QUERY_RESULT",
+      "statement": "Que equipas têm pontuação total superior a 25?",
+      "options": [
+        {"id": "A", "text": "Apenas 1"},
+        {"id": "B", "text": "Apenas 2"},
+        {"id": "C", "text": "1 e 2"},
+        {"id": "D", "text": "Nenhuma"}
+      ],
+      "correctOption": "A",
+      "explanation": "A equipa 1 tem total 30.",
+      "verification": {
+        "tables": [
+          {
+            "name": "player",
+            "columns": [{"name": "team_id", "type": "INT"}, {"name": "score", "type": "INT"}],
+            "rows": [[1, 10], [1, 20], [2, 12]]
+          }
+        ],
+        "query": "SELECT team_id FROM {{player}} GROUP BY team_id HAVING SUM(score) > 25",
+        "expectedResult": [[1]]
+      }
+    },
+
+    {
+      "id": "databases-l15-v01",
+      "competency": "DATABASES",
+      "level": 15,
+      "variant": 1,
+      "type": "FIND_ERROR",
+      "statement": "Qual é o problema de repetir course_name em várias linhas de STUDENT_COURSE?",
+      "options": [
+        {"id": "A", "text": "Redundância e anomalias de atualização"},
+        {"id": "B", "text": "Demasiadas chaves primárias"},
+        {"id": "C", "text": "A tabela está sempre na 3FN"},
+        {"id": "D", "text": "Não existe problema"}
+      ],
+      "correctOption": "A",
+      "explanation": "A repetição pode causar inconsistências e anomalias.",
+      "verification": {
+        "tables": [
+          {
+            "name": "student_course",
+            "columns": [{"name": "student_id", "type": "INT"}, {"name": "course_id", "type": "INT"}, {"name": "course_name", "type": "VARCHAR(50)"}],
+            "rows": [[1, 10, "BD"], [2, 10, "BD"]]
+          }
+        ],
+        "query": "SELECT COUNT(DISTINCT course_name) FROM {{student_course}} WHERE course_id = 10",
+        "expectedResult": [[1]]
+      }
+    },
+    {
+      "id": "databases-l15-v02",
+      "competency": "DATABASES",
+      "level": 15,
+      "variant": 2,
+      "type": "CORRECT_QUERY",
+      "statement": "Qual decomposição reduz dependências transitivas?",
+      "options": [
+        {"id": "A", "text": "STUDENT, COURSE e ENROLLMENT separados"},
+        {"id": "B", "text": "Duplicar a tabela original"},
+        {"id": "C", "text": "Remover todas as chaves"},
+        {"id": "D", "text": "Guardar tudo numa única coluna"}
+      ],
+      "correctOption": "A",
+      "explanation": "As entidades e a relação devem ser separadas.",
+      "verification": {
+        "tables": [
+          {
+            "name": "course",
+            "columns": [{"name": "id", "type": "INT"}, {"name": "name", "type": "VARCHAR(50)"}],
+            "rows": [[10, "BD"], [20, "POO"]]
+          }
+        ],
+        "query": "SELECT name FROM {{course}} WHERE id = 10",
+        "expectedResult": [["BD"]]
+      }
+    },
+
+    {
+      "id": "databases-l16-v01",
+      "competency": "DATABASES",
+      "level": 16,
+      "variant": 1,
+      "type": "QUERY_RESULT",
+      "statement": "O que acontece depois de UPDATE seguido de ROLLBACK?",
+      "options": [
+        {"id": "A", "text": "A alteração é desfeita"},
+        {"id": "B", "text": "A alteração é confirmada"},
+        {"id": "C", "text": "A tabela é apagada"},
+        {"id": "D", "text": "A transação faz COMMIT"}
+      ],
+      "correctOption": "A",
+      "explanation": "ROLLBACK desfaz alterações não confirmadas.",
+      "verification": {
+        "tables": [
+          {
+            "name": "account",
+            "columns": [{"name": "id", "type": "INT"}, {"name": "balance", "type": "INT"}],
+            "rows": [[1, 100]]
+          }
+        ],
+        "query": "SELECT balance FROM {{account}} WHERE id = 1",
+        "expectedResult": [[100]]
+      }
+    },
+    {
+      "id": "databases-l16-v02",
+      "competency": "DATABASES",
+      "level": 16,
+      "variant": 2,
+      "type": "QUERY_RESULT",
+      "statement": "O que acontece depois de INSERT seguido de COMMIT?",
+      "options": [
+        {"id": "A", "text": "A inserção é confirmada"},
+        {"id": "B", "text": "A inserção é sempre desfeita"},
+        {"id": "C", "text": "A tabela é bloqueada para sempre"},
+        {"id": "D", "text": "A inserção nunca fica visível"}
+      ],
+      "correctOption": "A",
+      "explanation": "COMMIT confirma permanentemente a transação.",
+      "verification": {
+        "tables": [
+          {
+            "name": "log_entry",
+            "columns": [{"name": "id", "type": "INT"}, {"name": "message", "type": "VARCHAR(50)"}],
+            "rows": [[1, "ok"]]
+          }
+        ],
+        "query": "SELECT message FROM {{log_entry}} WHERE id = 1",
+        "expectedResult": [["ok"]]
+      }
+    },
+
+    {
+      "id": "databases-l17-v01",
+      "competency": "DATABASES",
+      "level": 17,
+      "variant": 1,
+      "type": "FIND_ERROR",
+      "statement": "Duas transações sobrescrevem alterações uma da outra. Que problema ocorreu?",
+      "options": [
+        {"id": "A", "text": "Lost update"},
+        {"id": "B", "text": "Normalização"},
+        {"id": "C", "text": "Violação de chave primária"},
+        {"id": "D", "text": "Índice duplicado"}
+      ],
+      "correctOption": "A",
+      "explanation": "Uma atualização perdeu-se devido à atualização concorrente.",
+      "verification": {
+        "tables": [
+          {
+            "name": "account",
+            "columns": [{"name": "id", "type": "INT"}, {"name": "balance", "type": "INT"}],
+            "rows": [[1, 100]]
+          }
+        ],
+        "query": "SELECT balance FROM {{account}} WHERE id = 1",
+        "expectedResult": [[100]]
+      }
+    },
+    {
+      "id": "databases-l17-v02",
+      "competency": "DATABASES",
+      "level": 17,
+      "variant": 2,
+      "type": "FIND_ERROR",
+      "statement": "Uma transação lê valores diferentes da mesma linha em momentos diferentes. Que fenómeno ocorreu?",
+      "options": [
+        {"id": "A", "text": "Non-repeatable read"},
+        {"id": "B", "text": "Deadlock obrigatório"},
+        {"id": "C", "text": "Foreign key cascade"},
+        {"id": "D", "text": "Full table scan"}
+      ],
+      "correctOption": "A",
+      "explanation": "A mesma leitura produziu resultados diferentes.",
+      "verification": {
+        "tables": [
+          {
+            "name": "account",
+            "columns": [{"name": "id", "type": "INT"}, {"name": "balance", "type": "INT"}],
+            "rows": [[1, 100]]
+          }
+        ],
+        "query": "SELECT balance FROM {{account}} WHERE id = 1",
+        "expectedResult": [[100]]
+      }
+    },
+
+    {
+      "id": "databases-l18-v01",
+      "competency": "DATABASES",
+      "level": 18,
+      "variant": 1,
+      "type": "CORRECT_QUERY",
+      "statement": "Qual índice ajuda a pesquisar diretamente por email?",
+      "options": [
+        {"id": "A", "text": "INDEX(email)"},
+        {"id": "B", "text": "INDEX(id, name)"},
+        {"id": "C", "text": "INDEX(*)"},
+        {"id": "D", "text": "INDEX sem colunas"}
+      ],
+      "correctOption": "A",
+      "explanation": "O índice deve começar pela coluna usada no filtro.",
+      "verification": {
+        "tables": [
+          {
+            "name": "customer",
+            "columns": [{"name": "id", "type": "INT"}, {"name": "email", "type": "VARCHAR(100)"}],
+            "rows": [[1, "a@example.com"], [2, "b@example.com"]]
+          }
+        ],
+        "query": "SELECT id FROM {{customer}} WHERE email = 'a@example.com'",
+        "expectedResult": [[1]]
+      }
+    },
+    {
+      "id": "databases-l18-v02",
+      "competency": "DATABASES",
+      "level": 18,
+      "variant": 2,
+      "type": "CORRECT_QUERY",
+      "statement": "Qual índice composto é adequado para WHERE customer_id = ? ORDER BY created_at?",
+      "options": [
+        {"id": "A", "text": "INDEX(customer_id, created_at)"},
+        {"id": "B", "text": "INDEX(created_at, customer_id)"},
+        {"id": "C", "text": "INDEX(*)"},
+        {"id": "D", "text": "INDEX(id)"}
+      ],
+      "correctOption": "A",
+      "explanation": "A ordem acompanha primeiro o filtro e depois a ordenação.",
+      "verification": {
+        "tables": [
+          {
+            "name": "order_table",
+            "columns": [{"name": "id", "type": "INT"}, {"name": "customer_id", "type": "INT"}, {"name": "created_at", "type": "INT"}],
+            "rows": [[1, 10, 1], [2, 10, 2], [3, 20, 1]]
+          }
+        ],
+        "query": "SELECT id FROM {{order_table}} WHERE customer_id = 10 ORDER BY created_at",
+        "expectedResult": [[1], [2]]
+      }
+    },
+
+    {
+      "id": "databases-l19-v01",
+      "competency": "DATABASES",
+      "level": 19,
+      "variant": 1,
+      "type": "CORRECT_QUERY",
+      "statement": "Qual consulta encontra estudantes que têm pelo menos uma inscrição?",
+      "options": [
+        {"id": "A", "text": "JOIN com DISTINCT"},
+        {"id": "B", "text": "LEFT JOIN e IS NULL"},
+        {"id": "C", "text": "CROSS JOIN"},
+        {"id": "D", "text": "WHERE student_id IS NULL"}
+      ],
+      "correctOption": "A",
+      "explanation": "O JOIN encontra correspondências e DISTINCT evita repetições.",
+      "verification": {
+        "tables": [
+          {
+            "name": "student",
+            "columns": [{"name": "id", "type": "INT"}],
+            "rows": [[1], [2]]
+          },
+          {
+            "name": "enrollment",
+            "columns": [{"name": "student_id", "type": "INT"}],
+            "rows": [[1], [1]]
+          }
+        ],
+        "query": "SELECT DISTINCT s.id FROM {{student}} s JOIN {{enrollment}} e ON s.id = e.student_id ORDER BY s.id",
+        "expectedResult": [[1]]
+      }
+    },
+    {
+      "id": "databases-l19-v02",
+      "competency": "DATABASES",
+      "level": 19,
+      "variant": 2,
+      "type": "CORRECT_QUERY",
+      "statement": "Qual consulta encontra produtos sem avaliações?",
+      "options": [
+        {"id": "A", "text": "NOT EXISTS"},
+        {"id": "B", "text": "INNER JOIN"},
+        {"id": "C", "text": "EXISTS"},
+        {"id": "D", "text": "CROSS JOIN"}
+      ],
+      "correctOption": "A",
+      "explanation": "NOT EXISTS seleciona produtos sem correspondência.",
+      "verification": {
+        "tables": [
+          {
+            "name": "product",
+            "columns": [{"name": "id", "type": "INT"}],
+            "rows": [[1], [2]]
+          },
+          {
+            "name": "review",
+            "columns": [{"name": "product_id", "type": "INT"}],
+            "rows": [[1]]
+          }
+        ],
+        "query": "SELECT p.id FROM {{product}} p WHERE NOT EXISTS (SELECT 1 FROM {{review}} r WHERE r.product_id = p.id)",
+        "expectedResult": [[2]]
+      }
+    },
+
+    {
+      "id": "databases-l20-v01",
+      "competency": "DATABASES",
+      "level": 20,
+      "variant": 1,
+      "type": "FIND_ERROR",
+      "statement": "Porque pode ser ineficiente usar WHERE DATE(created_at) = '2026-01-01'?",
+      "options": [
+        {"id": "A", "text": "A função pode impedir o uso eficiente do índice"},
+        {"id": "B", "text": "DATE só pode ser usada no GROUP BY"},
+        {"id": "C", "text": "Índices nunca ajudam em datas"},
+        {"id": "D", "text": "created_at deve ser foreign key"}
+      ],
+      "correctOption": "A",
+      "explanation": "Aplicar uma função à coluna pode impedir uma pesquisa eficiente pelo índice.",
+      "verification": {
+        "tables": [
+          {
+            "name": "event",
+            "columns": [{"name": "id", "type": "INT"}, {"name": "created_at", "type": "DATE"}],
+            "rows": [[1, "2026-01-01"], [2, "2026-01-02"]]
+          }
+        ],
+        "query": "SELECT id FROM {{event}} WHERE created_at >= '2026-01-01' AND created_at < '2026-01-02'",
+        "expectedResult": [[1]]
+      }
+    },
+    {
+      "id": "databases-l20-v02",
+      "competency": "DATABASES",
+      "level": 20,
+      "variant": 2,
+      "type": "CORRECT_QUERY",
+      "statement": "Qual consulta é equivalente a age >= 18 AND age <= 25?",
+      "options": [
+        {"id": "A", "text": "age BETWEEN 18 AND 25"},
+        {"id": "B", "text": "age IN (18,25)"},
+        {"id": "C", "text": "age > 18 OR age < 25"},
+        {"id": "D", "text": "HAVING age BETWEEN 18 AND 25"}
+      ],
+      "correctOption": "A",
+      "explanation": "BETWEEN inclui ambos os limites.",
+      "verification": {
+        "tables": [
+          {
+            "name": "student",
+            "columns": [{"name": "id", "type": "INT"}, {"name": "age", "type": "INT"}],
+            "rows": [[1, 17], [2, 18], [3, 25], [4, 26]]
+          }
+        ],
+        "query": "SELECT id FROM {{student}} WHERE age BETWEEN 18 AND 25 ORDER BY id",
+        "expectedResult": [[2], [3]]
+      }
+    }
+  ]
+}
