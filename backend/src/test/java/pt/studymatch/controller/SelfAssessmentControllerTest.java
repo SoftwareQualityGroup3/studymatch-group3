@@ -20,10 +20,16 @@ import pt.studymatch.dto.SelfAssessmentRequest;
 import pt.studymatch.dto.SelfAssessmentResponse;
 import pt.studymatch.exception.StudentNotFoundException;
 import pt.studymatch.service.SelfAssessmentService;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.test.context.support.WithMockUser;
+import pt.studymatch.config.SecurityConfig;
+import pt.studymatch.repository.AppUserRepository;
 
 // testes da camada web do controller da autoavaliação
 // o service é simulado e vemos só se os códigos http e o json estão certos
 @WebMvcTest(SelfAssessmentController.class)
+@Import(SecurityConfig.class)
+@WithMockUser
 class SelfAssessmentControllerTest {
 
     private static final String URL = "/api/students/1/self-assessment";
@@ -33,6 +39,8 @@ class SelfAssessmentControllerTest {
 
     @MockitoBean
     private SelfAssessmentService selfAssessmentService;
+    @MockitoBean
+    private AppUserRepository appUserRepository;
 
     // monta um corpo de pedido com os valores que quisermos para testar casos inválidos
     private static String body(String programming, String mathematics,
