@@ -17,6 +17,7 @@ class DatabaseQuestionBankTest {
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private static JsonNode root;
 
+    // carrega o banco de perguntas uma única vez antes dos testes
     @BeforeAll
     static void loadFile() throws Exception {
         try (InputStream input = DatabaseQuestionBankTest.class
@@ -27,6 +28,7 @@ class DatabaseQuestionBankTest {
         }
     }
 
+    // confirma a quantidade de perguntas, níveis, variantes e opções
     @Test
     void validatesQuestionBankStructure() {
         assertEquals("DATABASES", root.path("competency").asText());
@@ -78,6 +80,7 @@ class DatabaseQuestionBankTest {
         }
     }
 
+    // garante que todas as perguntas podem ser verificadas através de SQL
     @Test
     void everyQuestionHasSqlVerification() {
         for (JsonNode question : root.path("questions")) {
@@ -95,6 +98,7 @@ class DatabaseQuestionBankTest {
         }
     }
 
+    // executa todas as queries contra a base de dados MySQL de testes
     @Test
     void executesAllQueriesAgainstMySql() throws Exception {
         String host = environment("DB_HOST", "localhost");
@@ -118,6 +122,7 @@ class DatabaseQuestionBankTest {
         Connection connection,
         JsonNode question
     ) throws SQLException {
+        // cada pergunta usa tabelas temporárias com nomes únicos
         String suffix = UUID.randomUUID()
             .toString()
             .replace("-", "")
@@ -140,6 +145,7 @@ class DatabaseQuestionBankTest {
                 .path("query")
                 .asText();
 
+            // substitui os placeholders do JSON pelos nomes temporários reais
             for (Map.Entry<String, String> entry : tableNames.entrySet()) {
                 query = query.replace(
                     "{{" + entry.getKey() + "}}",
@@ -161,6 +167,7 @@ class DatabaseQuestionBankTest {
                 question.path("id").asText()
             );
         } finally {
+            // remove as tabelas temporárias mesmo quando a verificação falha
             for (String tableName : tableNames.values()) {
                 try (Statement statement = connection.createStatement()) {
                     statement.execute("DROP TABLE IF EXISTS " + tableName);
@@ -169,6 +176,7 @@ class DatabaseQuestionBankTest {
         }
     }
 
+    // cria a tabela temporária definida na verificação da pergunta
     private static void createTable(
         Connection connection,
         JsonNode table,
@@ -192,6 +200,7 @@ class DatabaseQuestionBankTest {
         }
     }
 
+    // insere os dados de exemplo na tabela temporária
     private static void insertRows(
         Connection connection,
         JsonNode table,
@@ -274,6 +283,7 @@ class DatabaseQuestionBankTest {
         }
     }
 
+    // executa a query e converte o resultado para uma estrutura comparável
     private static List<List<Object>> executeQuery(
         Connection connection,
         String sql
