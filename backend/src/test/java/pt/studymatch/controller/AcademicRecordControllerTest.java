@@ -22,10 +22,16 @@ import pt.studymatch.exception.CourseUnitNotFoundException;
 import pt.studymatch.exception.DuplicateAcademicRecordException;
 import pt.studymatch.exception.StudentNotFoundException;
 import pt.studymatch.service.AcademicRecordService;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.test.context.support.WithMockUser;
+import pt.studymatch.config.SecurityConfig;
+import pt.studymatch.repository.AppUserRepository;
 
 // testes da camada web do controller dos registos
 // o service é simulado e vemos só se os códigos http e o json estão certos
 @WebMvcTest(AcademicRecordController.class)
+@Import(SecurityConfig.class)
+@WithMockUser
 class AcademicRecordControllerTest {
     private static final String URL = "/api/students/1/records";
     // corpo válido reutilizado nos testes em que o que importa é o que o service faz
@@ -41,6 +47,8 @@ class AcademicRecordControllerTest {
     private MockMvc mockMvc;
     @MockitoBean
     private AcademicRecordService academicRecordService;
+    @MockitoBean
+    private AppUserRepository appUserRepository;
 
     // monta um corpo de pedido com os valores que quisermos para testar casos inválidos
     private static String body(String grade, String academicYear, String semester) {
