@@ -15,6 +15,8 @@ import pt.studymatch.exception.CourseUnitNotFoundException;
 import pt.studymatch.exception.DuplicateAcademicRecordException;
 import pt.studymatch.exception.DuplicateStudentNumberException;
 import pt.studymatch.exception.StudentNotFoundException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 
 /**
  * Trata as exceções da aplicação e transforma-as
@@ -102,6 +104,33 @@ public class GlobalExceptionHandler {
             .status(HttpStatus.CONFLICT)
             .body(new ApiErrorResponse(
                 Map.of("courseUnitCode", exception.getMessage())
+            ));
+    }
+    /**
+     * Trata pedidos sem credenciais válidas (401).
+     */
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiErrorResponse> handleAuthentication(
+        AuthenticationException exception) {
+
+        return ResponseEntity
+            .status(HttpStatus.UNAUTHORIZED)
+            .body(new ApiErrorResponse(
+                Map.of("general", "Authentication is required")
+            ));
+    }
+
+    /**
+     * Trata pedidos de utilizadores sem o papel necessário (403).
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiErrorResponse> handleAccessDenied(
+        AccessDeniedException exception) {
+
+        return ResponseEntity
+            .status(HttpStatus.FORBIDDEN)
+            .body(new ApiErrorResponse(
+                Map.of("general", "Access denied")
             ));
     }
 

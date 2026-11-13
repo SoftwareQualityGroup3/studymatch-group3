@@ -20,6 +20,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import pt.studymatch.domain.Role;
 import pt.studymatch.repository.AppUserRepository;
@@ -32,7 +36,20 @@ import pt.studymatch.repository.AppUserRepository;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+        HttpSecurity http,
+        @Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver)
+        throws Exception {
+
+        // Entrega os erros de segurança ao GlobalExceptionHandler, para que o
+        // 401 e o 403 tenham o mesmo corpo de erro que o resto da API.
+        AuthenticationEntryPoint entryPoint =
+            (request, response, exception) ->
+                resolver.resolveException(request, response, null, exception);
+        AccessDeniedHandler accessDeniedHandler =
+            (request, response, exception) ->
+                resolver.resolveException(request, response, null, exception);
+
         http
             // CSRF desativado: a API é stateless, não usa sessões nem cookies de
             // autenticação. Cada pedido leva o header Authorization, que o browser
@@ -41,7 +58,10 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .httpBasic(Customizer.withDefaults())
+            .httpBasic(basic -> basic.authenticationEntryPoint(entryPoint))
+            .exceptionHandling(exceptions -> exceptions
+                .authenticationEntryPoint(entryPoint)
+                .accessDeniedHandler(accessDeniedHandler))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.GET, "/api/health").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/users")
