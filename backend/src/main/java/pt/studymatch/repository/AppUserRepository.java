@@ -14,4 +14,5 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     boolean existsByUsername(String username);
 
     boolean existsByRole(Role role);
+    boolean existsByStudentId(Long studentId);
 }

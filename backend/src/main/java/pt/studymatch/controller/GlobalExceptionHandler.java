@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import pt.studymatch.exception.DuplicateUsernameException;
 import pt.studymatch.dto.ApiErrorResponse;
 import pt.studymatch.exception.CourseUnitNotFoundException;
 import pt.studymatch.exception.DuplicateAcademicRecordException;
@@ -115,6 +116,19 @@ public class GlobalExceptionHandler {
             .badRequest()
             .body(new ApiErrorResponse(
                 Map.of("general", exception.getMessage())
+            ));
+    }
+    /**
+     * Trata usernames repetidos.
+     */
+    @ExceptionHandler(DuplicateUsernameException.class)
+    public ResponseEntity<ApiErrorResponse> handleDuplicateUsername(
+        DuplicateUsernameException exception) {
+
+        return ResponseEntity
+            .status(HttpStatus.CONFLICT)
+            .body(new ApiErrorResponse(
+                Map.of("username", exception.getMessage())
             ));
     }
 }
