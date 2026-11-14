@@ -12,6 +12,8 @@ import java.sql.*;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 class DatabaseQuestionBankTest {
 
@@ -170,6 +172,78 @@ class DatabaseQuestionBankTest {
                 found,
                 "A resposta correta não existe nas opções: " + questionId
             );
+        }
+    }
+
+    @Test
+    void correctQueryQuestionsHaveExactlyOneCorrectOption() throws Exception {
+        try (Connection connection = openConnection()) {
+            for (JsonNode question : root.path("questions")) {
+                if (!"CORRECT_QUERY".equals(question.path("type").asText())) {
+                    continue;
+                }
+
+                String questionId = question.path("id").asText();
+                String suffix = UUID.randomUUID()
+                    .toString()
+                    .replace("-", "")
+                    .substring(0, 12);
+
+                Map<String, String> tableNames = new LinkedHashMap<>();
+                JsonNode tables = question.path("verification").path("tables");
+
+                try {
+                    for (JsonNode table : tables) {
+                        String originalName = table.path("name").asText();
+                        String testName = originalName + "_" + suffix;
+
+                        tableNames.put(originalName, testName);
+                        createTable(connection, table, testName);
+                        insertRows(connection, table, testName);
+                    }
+
+                    List<List<Object>> expected = MAPPER.convertValue(
+                        question.path("verification").path("expectedResult"),
+                        new TypeReference<>() {}
+                    );
+
+                    int matchingOptions = 0;
+                    String matchingOption = null;
+
+                    for (JsonNode option : question.path("options")) {
+                        String optionId = option.path("id").asText();
+                        String query = replaceTableNames(
+                            option.path("text").asText(),
+                            tableNames
+                        );
+
+                        List<List<Object>> actual = executeQuery(
+                            connection,
+                            query
+                        );
+
+                        if (rowsEqual(expected, actual)) {
+                            matchingOptions++;
+                            matchingOption = optionId;
+                        }
+                    }
+
+                    assertEquals(
+                        1,
+                        matchingOptions,
+                        "Deve existir exatamente uma opção correta em "
+                            + questionId
+                    );
+
+                    assertEquals(
+                        question.path("correctOption").asText(),
+                        matchingOption,
+                        "correctOption incorreto em " + questionId
+                    );
+                } finally {
+                    dropTables(connection, tableNames.values());
+                }
+            }
         }
     }
 
@@ -364,6 +438,116 @@ class DatabaseQuestionBankTest {
 
         try (Statement statement = connection.createStatement()) {
             statement.execute(sql);
+
+            for (JsonNode index : table.path("indexes")) {
+                List<String> indexColumns = new ArrayList<>();
+
+                for (JsonNode column : index.path("columns")) {
+                    indexColumns.add(column.asText());
+                }
+
+                statement.execute(
+                    "CREATE INDEX " + index.path("name").asText()
+                        + " ON " + tableName
+                        + " (" + String.join(", ", indexColumns) + ")"
+                );
+            }
+        }
+    }
+
+    private static JsonNode findQuestion(String questionId) {
+        for (JsonNode question : root.path("questions")) {
+            if (questionId.equals(question.path("id").asText())) {
+                return question;
+            }
+        }
+
+        fail("Pergunta não encontrada: " + questionId);
+        return null;
+    }
+
+    private static void applyConstraints(
+        Connection connection,
+        JsonNode table,
+        Map<String, String> tableNames
+    ) throws SQLException {
+        String tableName = tableNames.get(table.path("name").asText());
+        JsonNode constraints = table.path("constraints");
+
+        if (constraints.has("primaryKey")) {
+            List<String> columns = new ArrayList<>();
+
+            for (JsonNode column : constraints.path("primaryKey")) {
+                columns.add(column.asText());
+            }
+
+            executeSql(
+                connection,
+                "ALTER TABLE " + tableName
+                    + " ADD PRIMARY KEY (" + String.join(", ", columns) + ")"
+            );
+        }
+
+        for (JsonNode foreignKey : constraints.path("foreignKeys")) {
+            List<String> columns = new ArrayList<>();
+            List<String> referencedColumns = new ArrayList<>();
+
+            for (JsonNode column : foreignKey.path("columns")) {
+                columns.add(column.asText());
+            }
+
+            for (JsonNode column : foreignKey.path("referencedColumns")) {
+                referencedColumns.add(column.asText());
+            }
+
+            String referencedTable = tableNames.get(
+                foreignKey.path("referencedTable").asText()
+            );
+
+            executeSql(
+                connection,
+                "ALTER TABLE " + tableName
+                    + " ADD FOREIGN KEY ("
+                    + String.join(", ", columns)
+                    + ") REFERENCES "
+                    + referencedTable
+                    + " ("
+                    + String.join(", ", referencedColumns)
+                    + ")"
+            );
+        }
+    }
+
+    private static void insertRawRow(
+        Connection connection,
+        String tableName,
+        List<?> values
+    ) throws SQLException {
+        String placeholders = String.join(
+            ", ",
+            Collections.nCopies(values.size(), "?")
+        );
+
+        String sql = "INSERT INTO " + tableName
+            + " VALUES (" + placeholders + ")";
+
+        try (PreparedStatement statement =
+                 connection.prepareStatement(sql)) {
+
+            for (int index = 0; index < values.size(); index++) {
+                statement.setObject(index + 1, values.get(index));
+            }
+
+            statement.executeUpdate();
+        }
+    }
+
+    private static void executeSql(
+        Connection connection,
+        String sql
+    ) throws SQLException {
+        try (Statement statement = connection.createStatement()) {
+            statement.execute(sql);
         }
     }
 
@@ -433,6 +617,51 @@ class DatabaseQuestionBankTest {
         }
 
         return result;
+    }
+
+    private static boolean rowsEqual(
+        List<List<Object>> expected,
+        List<List<Object>> actual
+    ) {
+        if (expected.size() != actual.size()) {
+            return false;
+        }
+
+        for (int rowIndex = 0; rowIndex < expected.size(); rowIndex++) {
+            List<Object> expectedRow = expected.get(rowIndex);
+            List<Object> actualRow = actual.get(rowIndex);
+
+            if (expectedRow.size() != actualRow.size()) {
+                return false;
+            }
+
+            for (
+                int columnIndex = 0;
+                columnIndex < expectedRow.size();
+                columnIndex++
+            ) {
+                Object expectedValue = expectedRow.get(columnIndex);
+                Object actualValue = actualRow.get(columnIndex);
+
+                if (
+                    expectedValue instanceof Number
+                        && actualValue instanceof Number
+                ) {
+                    if (
+                        new BigDecimal(expectedValue.toString())
+                            .compareTo(
+                                new BigDecimal(actualValue.toString())
+                            ) != 0
+                    ) {
+                        return false;
+                    }
+                } else if (!Objects.equals(expectedValue, actualValue)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     private static void assertRowsEqual(
@@ -514,6 +743,13 @@ class DatabaseQuestionBankTest {
                 "{{" + entry.getKey() + "}}",
                 entry.getValue()
             );
+
+            result = result.replaceAll(
+                "(?i)\\b"
+                    + Pattern.quote(entry.getKey())
+                    + "\\b",
+                Matcher.quoteReplacement(entry.getValue())
+            );
         }
 
         return result;
@@ -576,5 +812,500 @@ class DatabaseQuestionBankTest {
         );
 
         return value;
+    }
+
+    @Test
+    void primaryAndForeignKeysAreEnforced() throws Exception {
+        JsonNode question = findQuestion("databases-l05-v01");
+
+        try (Connection connection = openConnection()) {
+            String suffix = UUID.randomUUID()
+                .toString()
+                .replace("-", "")
+                .substring(0, 12);
+
+            Map<String, String> tableNames = new LinkedHashMap<>();
+            JsonNode tables = question.path("verification").path("tables");
+
+            try {
+                for (JsonNode table : tables) {
+                    String originalName = table.path("name").asText();
+                    String testName = originalName + "_" + suffix;
+
+                    tableNames.put(originalName, testName);
+                    createTable(connection, table, testName);
+                }
+
+                for (JsonNode table : tables) {
+                    applyConstraints(connection, table, tableNames);
+                    insertRows(
+                        connection,
+                        table,
+                        tableNames.get(table.path("name").asText())
+                    );
+                }
+
+                String enrollmentTable = tableNames.get("enrollment");
+
+                SQLException exception = assertThrows(
+                    SQLException.class,
+                    () -> insertRawRow(
+                        connection,
+                        enrollmentTable,
+                        List.of(99)
+                    )
+                );
+
+                assertTrue(
+                    exception.getMessage().toLowerCase(Locale.ROOT)
+                        .contains("foreign"),
+                    "A violação deveria ser causada pela foreign key"
+                );
+            } finally {
+                dropTables(connection, tableNames.values());
+            }
+        }
+    }
+
+    @Test
+    void commitAndRollbackAreActuallyEnforced() throws Exception {
+        JsonNode rollbackQuestion = findQuestion("databases-l16-v01");
+        JsonNode commitQuestion = findQuestion("databases-l16-v02");
+
+        try (Connection connection = openConnection()) {
+            String suffix = UUID.randomUUID()
+                .toString()
+                .replace("-", "")
+                .substring(0, 12);
+
+            String accountTable = "account_" + suffix;
+            String logTable = "log_entry_" + suffix;
+
+            try {
+                JsonNode account = rollbackQuestion
+                    .path("verification")
+                    .path("tables")
+                    .get(0);
+
+                JsonNode logEntry = commitQuestion
+                    .path("verification")
+                    .path("tables")
+                    .get(0);
+
+                createTable(connection, account, accountTable);
+                insertRows(connection, account, accountTable);
+
+                connection.setAutoCommit(false);
+
+                try (Statement statement = connection.createStatement()) {
+                    statement.executeUpdate(
+                        "UPDATE " + accountTable
+                            + " SET balance = 50 WHERE id = 1"
+                    );
+                }
+
+                connection.rollback();
+
+                assertEquals(
+                    List.of(List.of(100)),
+                    executeQuery(
+                        connection,
+                        "SELECT balance FROM " + accountTable
+                            + " WHERE id = 1"
+                    )
+                );
+
+                connection.setAutoCommit(true);
+
+                createTable(connection, logEntry, logTable);
+                insertRows(connection, logEntry, logTable);
+
+                connection.setAutoCommit(false);
+
+                try (Statement statement = connection.createStatement()) {
+                    statement.executeUpdate(
+                        "INSERT INTO " + logTable
+                            + " VALUES (3, 'committed')"
+                    );
+                }
+
+                connection.commit();
+                connection.setAutoCommit(true);
+
+                assertEquals(
+                    List.of(List.of(3L)),
+                    executeQuery(
+                        connection,
+                        "SELECT COUNT(*) FROM " + logTable
+                    )
+                );
+            } finally {
+                if (!connection.getAutoCommit()) {
+                    connection.rollback();
+                    connection.setAutoCommit(true);
+                }
+
+                dropTables(connection, List.of(accountTable, logTable));
+            }
+        }
+    }
+
+    @Test
+    void transactionIsolationScenariosAreActuallyExecuted() throws Exception {
+        JsonNode account = findQuestion("databases-l17-v01")
+            .path("verification")
+            .path("tables")
+            .get(0);
+
+        String suffix = UUID.randomUUID()
+            .toString()
+            .replace("-", "")
+            .substring(0, 12);
+
+        String tableName = "account_" + suffix;
+
+        try (
+            Connection first = openConnection();
+            Connection second = openConnection()
+        ) {
+            try {
+                createTable(first, account, tableName);
+                insertRows(first, account, tableName);
+
+                first.setTransactionIsolation(
+                    Connection.TRANSACTION_READ_COMMITTED
+                );
+                first.setAutoCommit(false);
+
+                int firstRead = ((Number) executeQuery(
+                    first,
+                    "SELECT balance FROM " + tableName + " WHERE id = 1"
+                ).get(0).get(0)).intValue();
+
+                assertEquals(100, firstRead);
+
+                second.setAutoCommit(false);
+
+                try (Statement statement = second.createStatement()) {
+                    statement.executeUpdate(
+                        "UPDATE " + tableName
+                            + " SET balance = 150 WHERE id = 1"
+                    );
+                }
+
+                second.commit();
+
+                int secondRead = ((Number) executeQuery(
+                    first,
+                    "SELECT balance FROM " + tableName + " WHERE id = 1"
+                ).get(0).get(0)).intValue();
+
+                assertEquals(
+                    150,
+                    secondRead,
+                    "READ_COMMITTED deve permitir observar a nova leitura"
+                );
+
+                first.rollback();
+                first.setAutoCommit(true);
+
+                try (Statement statement = first.createStatement()) {
+                    statement.executeUpdate(
+                        "UPDATE " + tableName
+                            + " SET balance = 100 WHERE id = 1"
+                    );
+                }
+
+                first.setAutoCommit(false);
+                second.setAutoCommit(false);
+
+                int firstSnapshot = ((Number) executeQuery(
+                    first,
+                    "SELECT balance FROM " + tableName + " WHERE id = 1"
+                ).get(0).get(0)).intValue();
+
+                int secondSnapshot = ((Number) executeQuery(
+                    second,
+                    "SELECT balance FROM " + tableName + " WHERE id = 1"
+                ).get(0).get(0)).intValue();
+
+                assertEquals(100, firstSnapshot);
+                assertEquals(100, secondSnapshot);
+
+                try (Statement statement = first.createStatement()) {
+                    statement.executeUpdate(
+                        "UPDATE " + tableName
+                            + " SET balance = 110 WHERE id = 1"
+                    );
+                }
+
+                first.commit();
+
+                try (Statement statement = second.createStatement()) {
+                    statement.executeUpdate(
+                        "UPDATE " + tableName
+                            + " SET balance = 120 WHERE id = 1"
+                    );
+                }
+
+                second.commit();
+
+                int finalBalance = ((Number) executeQuery(
+                    first,
+                    "SELECT balance FROM " + tableName + " WHERE id = 1"
+                ).get(0).get(0)).intValue();
+
+                assertEquals(
+                    120,
+                    finalBalance,
+                    "A segunda gravação substitui a primeira"
+                );
+            } finally {
+                if (!first.getAutoCommit()) {
+                    first.rollback();
+                    first.setAutoCommit(true);
+                }
+
+                if (!second.getAutoCommit()) {
+                    second.rollback();
+                    second.setAutoCommit(true);
+                }
+
+                dropTables(first, List.of(tableName));
+            }
+        }
+    }
+
+    @Test
+    void declaredIndexesAreCreatedInMySql() throws Exception {
+        assertIndexExists(
+            "databases-l18-v01",
+            "customer",
+            "idx_customer_email"
+        );
+
+        assertIndexExists(
+            "databases-l18-v02",
+            "order_table",
+            "idx_order_customer_created"
+        );
+
+        assertIndexExists(
+            "databases-l18-v02",
+            "order_table",
+            "idx_order_created_customer"
+        );
+
+        assertIndexExists(
+            "databases-l18-v02",
+            "order_table",
+            "idx_order_id"
+        );
+    }
+
+    private static void assertIndexExists(
+        String questionId,
+        String originalTableName,
+        String expectedIndex
+    ) throws Exception {
+        JsonNode question = findQuestion(questionId);
+        JsonNode table = null;
+
+        for (JsonNode candidate :
+            question.path("verification").path("tables")) {
+            if (originalTableName.equals(candidate.path("name").asText())) {
+                table = candidate;
+                break;
+            }
+        }
+
+        assertNotNull(table, "Tabela não encontrada: " + originalTableName);
+
+        String suffix = UUID.randomUUID()
+            .toString()
+            .replace("-", "")
+            .substring(0, 12);
+
+        String testTableName = originalTableName + "_" + suffix;
+
+        try (Connection connection = openConnection()) {
+            try {
+                createTable(connection, table, testTableName);
+                insertRows(connection, table, testTableName);
+
+                List<List<Object>> indexes = executeQuery(
+                    connection,
+                    "SHOW INDEX FROM " + testTableName
+                );
+
+                boolean found = false;
+
+                for (List<Object> index : indexes) {
+                    if (expectedIndex.equals(String.valueOf(index.get(2)))) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                assertTrue(
+                    found,
+                    "Índice não criado: " + expectedIndex
+                );
+            } finally {
+                dropTables(connection, List.of(testTableName));
+            }
+        }
+    }
+
+    @Test
+    void denormalizedCourseNameProducesUpdateAnomaly() throws Exception {
+        JsonNode table = findQuestion("databases-l15-v01")
+            .path("verification")
+            .path("tables")
+            .get(0);
+
+        String tableName = "student_course_" + randomSuffix();
+
+        try (Connection connection = openConnection()) {
+            try {
+                createTable(connection, table, tableName);
+                insertRows(connection, table, tableName);
+
+                try (Statement statement = connection.createStatement()) {
+                    int updated = statement.executeUpdate(
+                        "UPDATE " + tableName
+                            + " SET course_name = 'BD2'"
+                            + " WHERE student_id = 1 AND course_id = 10"
+                    );
+
+                    assertEquals(1, updated);
+                }
+
+                List<List<Object>> inconsistentNames = executeQuery(
+                    connection,
+                    "SELECT COUNT(DISTINCT course_name) FROM "
+                        + tableName
+                        + " WHERE course_id = 10"
+                );
+
+                assertEquals(
+                    List.of(List.of(2L)),
+                    inconsistentNames,
+                    "A redundância permite nomes inconsistentes"
+                );
+            } finally {
+                dropTables(connection, List.of(tableName));
+            }
+        }
+    }
+
+    private static String randomSuffix() {
+        return UUID.randomUUID()
+            .toString()
+            .replace("-", "")
+            .substring(0, 12);
+    }
+
+    @Test
+    void equivalentQueriesAndIndexPlanAreVerified() throws Exception {
+        JsonNode equivalentQuestion = findQuestion("databases-l20-v02");
+        JsonNode studentTable = equivalentQuestion
+            .path("verification")
+            .path("tables")
+            .get(0);
+
+        String studentName = "student_" + randomSuffix();
+
+        try (Connection connection = openConnection()) {
+            try {
+                createTable(connection, studentTable, studentName);
+                insertRows(connection, studentTable, studentName);
+
+                Map<String, String> studentNames = Map.of(
+                    "student",
+                    studentName
+                );
+
+                String optionQuery = replaceTableNames(
+                    equivalentQuestion
+                        .path("options")
+                        .get(0)
+                        .path("text")
+                        .asText(),
+                    studentNames
+                );
+
+                String verificationQuery = replaceTableNames(
+                    equivalentQuestion
+                        .path("verification")
+                        .path("query")
+                        .asText(),
+                    studentNames
+                );
+
+                assertTrue(
+                    rowsEqual(
+                        executeQuery(connection, optionQuery),
+                        executeQuery(connection, verificationQuery)
+                    ),
+                    "As consultas equivalentes devem produzir o mesmo resultado"
+                );
+
+                JsonNode orderTable = findQuestion("databases-l18-v02")
+                    .path("verification")
+                    .path("tables")
+                    .get(0);
+
+                String orderName = "order_table_" + randomSuffix();
+
+                try {
+                    createTable(connection, orderTable, orderName);
+                    insertRows(connection, orderTable, orderName);
+
+                    String explain = explainQuery(
+                        connection,
+                        "SELECT id FROM " + orderName
+                            + " USE INDEX (idx_order_customer_created)"
+                            + " WHERE customer_id = 10"
+                            + " ORDER BY created_at, id"
+                    );
+
+                    assertEquals(
+                        "idx_order_customer_created",
+                        explain,
+                        "O plano deve usar o índice composto correto"
+                    );
+                } finally {
+                    dropTables(connection, List.of(orderName));
+                }
+            } finally {
+                dropTables(connection, List.of(studentName));
+            }
+        }
+    }
+
+    private static String explainQuery(
+        Connection connection,
+        String sql
+    ) throws SQLException {
+        try (
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("EXPLAIN " + sql)
+        ) {
+            ResultSetMetaData metadata = resultSet.getMetaData();
+            int keyColumn = -1;
+
+            for (int column = 1; column <= metadata.getColumnCount(); column++) {
+                if ("key".equalsIgnoreCase(metadata.getColumnName(column))) {
+                    keyColumn = column;
+                    break;
+                }
+            }
+
+            assertTrue(keyColumn > 0, "EXPLAIN não devolveu a coluna key");
+            assertTrue(resultSet.next(), "EXPLAIN não devolveu linhas");
+
+            return resultSet.getString(keyColumn);
+        }
     }
 }
