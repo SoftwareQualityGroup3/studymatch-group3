@@ -12,8 +12,12 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import pt.studymatch.dto.HealthResponse;
 import pt.studymatch.service.HealthService;
+import org.springframework.context.annotation.Import;
+import pt.studymatch.config.SecurityConfig;
+import pt.studymatch.repository.AppUserRepository;
 
 @WebMvcTest(HealthController.class)
+@Import(SecurityConfig.class)
 class HealthControllerTest {
 
     @Autowired
@@ -21,6 +25,8 @@ class HealthControllerTest {
 
     @MockitoBean
     private HealthService healthService;
+    @MockitoBean
+    private AppUserRepository appUserRepository;
 
     @Test
     void healthReturnsUpWhenDatabaseIsAvailable() throws Exception {

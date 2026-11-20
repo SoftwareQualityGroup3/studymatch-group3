@@ -14,16 +14,24 @@ import org.springframework.test.web.servlet.MockMvc;
 import pt.studymatch.domain.Competency;
 import pt.studymatch.dto.CourseUnitResponse;
 import pt.studymatch.service.CourseUnitService;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.test.context.support.WithMockUser;
+import pt.studymatch.config.SecurityConfig;
+import pt.studymatch.repository.AppUserRepository;
 
 // teste só da camada web
 // o webmvctest sobe apenas o controller e o mockmvc sem base de dados nem o resto da aplicação
 @WebMvcTest(CourseUnitController.class)
+@Import(SecurityConfig.class)
+@WithMockUser
 class CourseUnitControllerTest {
     @Autowired
     private MockMvc mockMvc;
     // o service é simulado com mockito porque aqui só queremos testar o controller
     @MockitoBean
     private CourseUnitService courseUnitService;
+    @MockitoBean
+    private AppUserRepository appUserRepository;
 
     // garante que o get devolve 200 e que o json tem o código o nome os ects e os pesos
     @Test
