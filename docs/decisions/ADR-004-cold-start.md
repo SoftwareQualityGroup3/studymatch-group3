@@ -2,7 +2,7 @@
 
 ## Estado
 
-Aprovado
+Proposto
 
 ## Contexto
 
