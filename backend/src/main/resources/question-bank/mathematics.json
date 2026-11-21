@@ -1,0 +1,1125 @@
+{
+  "competency": "MATHEMATICS",
+  "questions": [
+    {
+      "id": "mathematics-l01-v01",
+      "competency": "MATHEMATICS",
+      "level": 1,
+      "variant": 1,
+      "type": "ALGEBRA",
+      "statement": "Resolva a equação 3x + 5 = 20. Qual é o valor de x?",
+      "options": [
+        {
+          "id": "A",
+          "text": "x = 25/3"
+        },
+        {
+          "id": "B",
+          "text": "x = 5"
+        },
+        {
+          "id": "C",
+          "text": "x = 15"
+        },
+        {
+          "id": "D",
+          "text": "x = −5"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "3x = 20 − 5 = 15, logo x = 5. Erros típicos: somar 5 em vez de subtrair (x = 25/3), esquecer de dividir por 3 (x = 15) ou trocar o sinal (x = −5)."
+    },
+    {
+      "id": "mathematics-l01-v02",
+      "competency": "MATHEMATICS",
+      "level": 1,
+      "variant": 2,
+      "type": "ALGEBRA",
+      "statement": "Resolva a equação 2x − 7 = 9. Qual é o valor de x?",
+      "options": [
+        {
+          "id": "A",
+          "text": "x = 1"
+        },
+        {
+          "id": "B",
+          "text": "x = 16"
+        },
+        {
+          "id": "C",
+          "text": "x = −1"
+        },
+        {
+          "id": "D",
+          "text": "x = 8"
+        }
+      ],
+      "correctOption": "D",
+      "explanation": "2x = 9 + 7 = 16, logo x = 8. Erros típicos: subtrair 7 (x = 1), esquecer de dividir por 2 (x = 16) ou trocar o sinal (x = −1)."
+    },
+    {
+      "id": "mathematics-l02-v01",
+      "competency": "MATHEMATICS",
+      "level": 2,
+      "variant": 1,
+      "type": "FUNCTIONS",
+      "statement": "Seja f(x) = 2x² − 3x + 1. Qual é o valor de f(2)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "3"
+        },
+        {
+          "id": "B",
+          "text": "2"
+        },
+        {
+          "id": "C",
+          "text": "15"
+        },
+        {
+          "id": "D",
+          "text": "11"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "f(2) = 2·4 − 3·2 + 1 = 8 − 6 + 1 = 3. Erros típicos: esquecer o termo +1 (2), trocar o sinal de −3x (15) ou calcular (2·2)² (11)."
+    },
+    {
+      "id": "mathematics-l02-v02",
+      "competency": "MATHEMATICS",
+      "level": 2,
+      "variant": 2,
+      "type": "FUNCTIONS",
+      "statement": "Seja g(x) = 3x² − 2x − 5. Qual é o valor de g(−2)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "3"
+        },
+        {
+          "id": "B",
+          "text": "−13"
+        },
+        {
+          "id": "C",
+          "text": "11"
+        },
+        {
+          "id": "D",
+          "text": "21"
+        }
+      ],
+      "correctOption": "C",
+      "explanation": "g(−2) = 3·4 − 2·(−2) − 5 = 12 + 4 − 5 = 11. Erros típicos: tratar −2x como −4 (3), tomar (−2)² = −4 (−13) ou trocar o sinal de −5 (21)."
+    },
+    {
+      "id": "mathematics-l03-v01",
+      "competency": "MATHEMATICS",
+      "level": 3,
+      "variant": 1,
+      "type": "ALGEBRA",
+      "statement": "Quais são as soluções de x² − 5x + 6 = 0?",
+      "options": [
+        {
+          "id": "A",
+          "text": "x = −2 ou x = −3"
+        },
+        {
+          "id": "B",
+          "text": "x = 2 ou x = 3"
+        },
+        {
+          "id": "C",
+          "text": "x = 1 ou x = 6"
+        },
+        {
+          "id": "D",
+          "text": "x = −1 ou x = −6"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "x² − 5x + 6 = (x − 2)(x − 3), logo x = 2 ou x = 3. As outras opções trocam os sinais ou usam pares de fatores de 6 com soma errada."
+    },
+    {
+      "id": "mathematics-l03-v02",
+      "competency": "MATHEMATICS",
+      "level": 3,
+      "variant": 2,
+      "type": "ALGEBRA",
+      "statement": "Quais são as soluções de x² + x − 12 = 0?",
+      "options": [
+        {
+          "id": "A",
+          "text": "x = −3 ou x = 4"
+        },
+        {
+          "id": "B",
+          "text": "x = 2 ou x = −6"
+        },
+        {
+          "id": "C",
+          "text": "x = −2 ou x = 6"
+        },
+        {
+          "id": "D",
+          "text": "x = 3 ou x = −4"
+        }
+      ],
+      "correctOption": "D",
+      "explanation": "x² + x − 12 = (x − 3)(x + 4), logo x = 3 ou x = −4. Erros típicos: trocar os sinais das raízes (−3, 4) ou escolher pares de fatores de −12 cuja soma não é −1 (2, −6 e −2, 6)."
+    },
+    {
+      "id": "mathematics-l04-v01",
+      "competency": "MATHEMATICS",
+      "level": 4,
+      "variant": 1,
+      "type": "FUNCTIONS",
+      "statement": "Qual é o domínio da função f(x) = √(2x − 6)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "x ≥ 3"
+        },
+        {
+          "id": "B",
+          "text": "x > 3"
+        },
+        {
+          "id": "C",
+          "text": "x ≥ −3"
+        },
+        {
+          "id": "D",
+          "text": "x ≥ 6"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "É preciso 2x − 6 ≥ 0, ou seja, x ≥ 3 (o zero da raiz é permitido). Erros típicos: usar desigualdade estrita (x > 3), trocar o sinal (x ≥ −3) ou esquecer de dividir por 2 (x ≥ 6)."
+    },
+    {
+      "id": "mathematics-l04-v02",
+      "competency": "MATHEMATICS",
+      "level": 4,
+      "variant": 2,
+      "type": "FUNCTIONS",
+      "statement": "Qual é o domínio da função f(x) = ln(x − 2) / (x − 5)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "]2, +∞["
+        },
+        {
+          "id": "B",
+          "text": "[2, 5[ ∪ ]5, +∞["
+        },
+        {
+          "id": "C",
+          "text": "]2, 5[ ∪ ]5, +∞["
+        },
+        {
+          "id": "D",
+          "text": "]5, +∞["
+        }
+      ],
+      "correctOption": "C",
+      "explanation": "O logaritmo exige x − 2 > 0, ou seja, x > 2, e o denominador exige x ≠ 5. Domínio: ]2, 5[ ∪ ]5, +∞[. Erros típicos: esquecer x ≠ 5, incluir x = 2 ou considerar só x > 5."
+    },
+    {
+      "id": "mathematics-l05-v01",
+      "competency": "MATHEMATICS",
+      "level": 5,
+      "variant": 1,
+      "type": "FUNCTIONS",
+      "statement": "Sejam f(x) = 2x − 1 e g(x) = x² + 3. Qual é a expressão de (g∘f)(x) = g(f(x))?",
+      "options": [
+        {
+          "id": "A",
+          "text": "4x² + 4"
+        },
+        {
+          "id": "B",
+          "text": "4x² − 4x + 4"
+        },
+        {
+          "id": "C",
+          "text": "2x² + 5"
+        },
+        {
+          "id": "D",
+          "text": "4x² − 4x − 2"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "g(f(x)) = (2x − 1)² + 3 = 4x² − 4x + 1 + 3 = 4x² − 4x + 4. Erros típicos: esquecer o termo cruzado (4x² + 4), calcular f(g(x)) (2x² + 5) ou trocar o sinal do 3."
+    },
+    {
+      "id": "mathematics-l05-v02",
+      "competency": "MATHEMATICS",
+      "level": 5,
+      "variant": 2,
+      "type": "FUNCTIONS",
+      "statement": "Seja f(x) = (3x − 1)/2. Qual é a expressão da função inversa f⁻¹(x)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "(2x − 1)/3"
+        },
+        {
+          "id": "B",
+          "text": "(3x + 1)/2"
+        },
+        {
+          "id": "C",
+          "text": "2/(3x − 1)"
+        },
+        {
+          "id": "D",
+          "text": "(2x + 1)/3"
+        }
+      ],
+      "correctOption": "D",
+      "explanation": "De y = (3x − 1)/2 vem 2y = 3x − 1, logo x = (2y + 1)/3. Assim f⁻¹(x) = (2x + 1)/3. Erros típicos: trocar o sinal do 1, trocar os papéis de 3 e 2 ou tomar o inverso multiplicativo."
+    },
+    {
+      "id": "mathematics-l06-v01",
+      "competency": "MATHEMATICS",
+      "level": 6,
+      "variant": 1,
+      "type": "DERIVATIVES",
+      "statement": "Qual é a derivada de f(x) = x³ − 4x² + 5x?",
+      "options": [
+        {
+          "id": "A",
+          "text": "3x² − 8x + 5"
+        },
+        {
+          "id": "B",
+          "text": "3x² − 8x"
+        },
+        {
+          "id": "C",
+          "text": "3x² − 4x + 5"
+        },
+        {
+          "id": "D",
+          "text": "x⁴/4 − 4x³/3 + 5x²/2"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Derivando termo a termo: 3x² − 8x + 5. Erros típicos: esquecer de multiplicar pelo expoente (3x² − 4x + 5), esquecer a derivada de 5x (3x² − 8x) ou primitivar em vez de derivar."
+    },
+    {
+      "id": "mathematics-l06-v02",
+      "competency": "MATHEMATICS",
+      "level": 6,
+      "variant": 2,
+      "type": "DERIVATIVES",
+      "statement": "Qual é a derivada de f(x) = x⁴ − 2x³ + 7x?",
+      "options": [
+        {
+          "id": "A",
+          "text": "4x³ − 6x²"
+        },
+        {
+          "id": "B",
+          "text": "4x³ − 2x² + 7"
+        },
+        {
+          "id": "C",
+          "text": "4x³ − 6x² + 7"
+        },
+        {
+          "id": "D",
+          "text": "4x³ − 6x² + 7x"
+        }
+      ],
+      "correctOption": "C",
+      "explanation": "f′(x) = 4x³ − 6x² + 7. Erros típicos: esquecer a derivada de 7x (4x³ − 6x²), não multiplicar pelo expoente em −2x³ (4x³ − 2x² + 7) ou manter o x em 7x (4x³ − 6x² + 7x)."
+    },
+    {
+      "id": "mathematics-l07-v01",
+      "competency": "MATHEMATICS",
+      "level": 7,
+      "variant": 1,
+      "type": "SYSTEMS",
+      "statement": "Resolva o sistema 2x + y = 7 e x − y = 2. Qual é o par (x, y)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "(3, 5)"
+        },
+        {
+          "id": "B",
+          "text": "(3, 1)"
+        },
+        {
+          "id": "C",
+          "text": "(3, 13)"
+        },
+        {
+          "id": "D",
+          "text": "(1, 3)"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "Somando as equações: 3x = 9, logo x = 3 e y = 7 − 6 = 1. Verificação: 3 − 1 = 2. Erros típicos: isolar y = x + 2 em vez de y = x − 2 (3, 5), trocar o sinal de 2x (3, 13) ou trocar x com y (1, 3)."
+    },
+    {
+      "id": "mathematics-l07-v02",
+      "competency": "MATHEMATICS",
+      "level": 7,
+      "variant": 2,
+      "type": "SYSTEMS",
+      "statement": "Resolva o sistema 3x − 2y = 4 e x + y = 3. Qual é o par (x, y)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "(1, 2)"
+        },
+        {
+          "id": "B",
+          "text": "(−2, 5)"
+        },
+        {
+          "id": "C",
+          "text": "(2, −1)"
+        },
+        {
+          "id": "D",
+          "text": "(2, 1)"
+        }
+      ],
+      "correctOption": "D",
+      "explanation": "De x = 3 − y: 9 − 3y − 2y = 4, logo y = 1 e x = 2. Verificação: 6 − 2 = 4. Erros típicos: trocar o sinal ao substituir (−2, 5), trocar x com y (1, 2) ou errar o sinal de y (2, −1)."
+    },
+    {
+      "id": "mathematics-l08-v01",
+      "competency": "MATHEMATICS",
+      "level": 8,
+      "variant": 1,
+      "type": "DERIVATIVES",
+      "statement": "Qual é a derivada de f(x) = x·e^(2x)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "e^(2x)(1 + 2x)"
+        },
+        {
+          "id": "B",
+          "text": "e^(2x)(1 + x)"
+        },
+        {
+          "id": "C",
+          "text": "2x·e^(2x)"
+        },
+        {
+          "id": "D",
+          "text": "2e^(2x)"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Regra do produto e regra da cadeia: f′(x) = e^(2x) + x·2e^(2x) = e^(2x)(1 + 2x). Erros típicos: esquecer o fator 2 da cadeia, esquecer o primeiro termo ou derivar só e^(2x)."
+    },
+    {
+      "id": "mathematics-l08-v02",
+      "competency": "MATHEMATICS",
+      "level": 8,
+      "variant": 2,
+      "type": "DERIVATIVES",
+      "statement": "Qual é a derivada de f(x) = x²·ln x, para x > 0?",
+      "options": [
+        {
+          "id": "A",
+          "text": "2x·ln x"
+        },
+        {
+          "id": "B",
+          "text": "2x·ln x + 1/x"
+        },
+        {
+          "id": "C",
+          "text": "2x·ln x + x"
+        },
+        {
+          "id": "D",
+          "text": "x"
+        }
+      ],
+      "correctOption": "C",
+      "explanation": "Regra do produto: f′(x) = 2x·ln x + x²·(1/x) = 2x·ln x + x. Erros típicos: esquecer o segundo termo (2x·ln x), esquecer de multiplicar por x² (2x·ln x + 1/x) ou derivar só o logaritmo (x²/x)."
+    },
+    {
+      "id": "mathematics-l09-v01",
+      "competency": "MATHEMATICS",
+      "level": 9,
+      "variant": 1,
+      "type": "DERIVATIVES",
+      "statement": "Qual é a derivada de f(x) = sin(3x²)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "cos(3x²)"
+        },
+        {
+          "id": "B",
+          "text": "6x·cos(3x²)"
+        },
+        {
+          "id": "C",
+          "text": "−6x·cos(3x²)"
+        },
+        {
+          "id": "D",
+          "text": "3x²·cos(3x²)"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "Regra da cadeia: f′(x) = cos(3x²)·6x = 6x·cos(3x²). Erros típicos: esquecer a derivada interna (cos(3x²)), trocar o sinal (−6x·cos(3x²)) ou não derivar a potência (3x²·cos(3x²))."
+    },
+    {
+      "id": "mathematics-l09-v02",
+      "competency": "MATHEMATICS",
+      "level": 9,
+      "variant": 2,
+      "type": "DERIVATIVES",
+      "statement": "Seja f(x) = (x² + 1)⁵. Qual é o valor de f′(1)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "80"
+        },
+        {
+          "id": "B",
+          "text": "32"
+        },
+        {
+          "id": "C",
+          "text": "40"
+        },
+        {
+          "id": "D",
+          "text": "160"
+        }
+      ],
+      "correctOption": "D",
+      "explanation": "f′(x) = 5(x² + 1)⁴·2x, logo f′(1) = 5·2⁴·2 = 160. Erros típicos: esquecer o fator 2x (80), calcular f(1) = 2⁵ (32) ou esquecer 2x e errar o expoente (40)."
+    },
+    {
+      "id": "mathematics-l10-v01",
+      "competency": "MATHEMATICS",
+      "level": 10,
+      "variant": 1,
+      "type": "DERIVATIVES",
+      "statement": "Qual é o valor máximo da função f(x) = −x² + 6x + 1?",
+      "options": [
+        {
+          "id": "A",
+          "text": "10"
+        },
+        {
+          "id": "B",
+          "text": "3"
+        },
+        {
+          "id": "C",
+          "text": "28"
+        },
+        {
+          "id": "D",
+          "text": "1"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "f′(x) = −2x + 6 = 0 dá x = 3, e f(3) = −9 + 18 + 1 = 10. Erros típicos: responder com o ponto x = 3, trocar o sinal de x² (28) ou responder f(0) = 1."
+    },
+    {
+      "id": "mathematics-l10-v02",
+      "competency": "MATHEMATICS",
+      "level": 10,
+      "variant": 2,
+      "type": "DERIVATIVES",
+      "statement": "Em que ponto a função f(x) = x³ − 3x tem um mínimo local?",
+      "options": [
+        {
+          "id": "A",
+          "text": "x = −1"
+        },
+        {
+          "id": "B",
+          "text": "x = 0"
+        },
+        {
+          "id": "C",
+          "text": "x = 1"
+        },
+        {
+          "id": "D",
+          "text": "x = √3"
+        }
+      ],
+      "correctOption": "C",
+      "explanation": "f′(x) = 3x² − 3 = 0 dá x = ±1. Como f″(x) = 6x, f″(1) > 0 (mínimo) e f″(−1) < 0 (máximo). Logo o mínimo local é em x = 1. Erros típicos: escolher o máximo (x = −1), o ponto de inflexão (x = 0) ou o zero da função (x = √3)."
+    },
+    {
+      "id": "mathematics-l11-v01",
+      "competency": "MATHEMATICS",
+      "level": 11,
+      "variant": 1,
+      "type": "INTEGRALS",
+      "statement": "Calcule ∫₀² (3x² + 1) dx.",
+      "options": [
+        {
+          "id": "A",
+          "text": "8"
+        },
+        {
+          "id": "B",
+          "text": "10"
+        },
+        {
+          "id": "C",
+          "text": "13"
+        },
+        {
+          "id": "D",
+          "text": "12"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "Uma primitiva é x³ + x; entre 0 e 2 dá (8 + 2) − 0 = 10. Erros típicos: esquecer a primitiva de 1 (8), calcular o integrando em x = 2 (13) ou derivar em vez de primitivar (12)."
+    },
+    {
+      "id": "mathematics-l11-v02",
+      "competency": "MATHEMATICS",
+      "level": 11,
+      "variant": 2,
+      "type": "INTEGRALS",
+      "statement": "Calcule ∫₀^π sin x dx.",
+      "options": [
+        {
+          "id": "A",
+          "text": "−2"
+        },
+        {
+          "id": "B",
+          "text": "0"
+        },
+        {
+          "id": "C",
+          "text": "π"
+        },
+        {
+          "id": "D",
+          "text": "2"
+        }
+      ],
+      "correctOption": "D",
+      "explanation": "Uma primitiva é −cos x; entre 0 e π dá −cos π + cos 0 = 1 + 1 = 2. Erros típicos: trocar o sinal (−2), usar cos π − cos 0 e esquecer um termo (0) ou confundir com o valor π."
+    },
+    {
+      "id": "mathematics-l12-v01",
+      "competency": "MATHEMATICS",
+      "level": 12,
+      "variant": 1,
+      "type": "INTEGRALS",
+      "statement": "Qual é a primitiva de f(x) = x·eˣ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "(x − 1)eˣ + C"
+        },
+        {
+          "id": "B",
+          "text": "(x + 1)eˣ + C"
+        },
+        {
+          "id": "C",
+          "text": "(x²/2)eˣ + C"
+        },
+        {
+          "id": "D",
+          "text": "x·eˣ + C"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Por partes: ∫x·eˣ dx = x·eˣ − ∫eˣ dx = (x − 1)eˣ + C. Verifica-se derivando: (eˣ + (x − 1)eˣ) = x·eˣ. Erros típicos: trocar o sinal ((x + 1)eˣ), primitivar cada fator em separado (x²eˣ/2) ou esquecer o segundo termo (x·eˣ)."
+    },
+    {
+      "id": "mathematics-l12-v02",
+      "competency": "MATHEMATICS",
+      "level": 12,
+      "variant": 2,
+      "type": "INTEGRALS",
+      "statement": "Qual é a primitiva de f(x) = 2x/(x² + 1)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "2·ln(x² + 1) + C"
+        },
+        {
+          "id": "B",
+          "text": "arctan x + C"
+        },
+        {
+          "id": "C",
+          "text": "ln(x² + 1) + C"
+        },
+        {
+          "id": "D",
+          "text": "−1/(x² + 1) + C"
+        }
+      ],
+      "correctOption": "C",
+      "explanation": "Com u = x² + 1, du = 2x dx, logo ∫ du/u = ln(x² + 1) + C (x² + 1 > 0). Erros típicos: duplicar o fator (2·ln(x² + 1)), confundir com arctan x ou primitivar o denominador."
+    },
+    {
+      "id": "mathematics-l13-v01",
+      "competency": "MATHEMATICS",
+      "level": 13,
+      "variant": 1,
+      "type": "DETERMINANTS",
+      "statement": "Para que valor de k é que det [[2, k], [3, 4]] = 5?",
+      "options": [
+        {
+          "id": "A",
+          "text": "k = −1"
+        },
+        {
+          "id": "B",
+          "text": "k = 1"
+        },
+        {
+          "id": "C",
+          "text": "k = 13/3"
+        },
+        {
+          "id": "D",
+          "text": "k = 3"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "det = 2·4 − k·3 = 8 − 3k = 5, logo k = 1. Erros típicos: somar em vez de subtrair (k = −1), trocar a ordem da subtração (k = 13/3) ou esquecer de dividir por 3."
+    },
+    {
+      "id": "mathematics-l13-v02",
+      "competency": "MATHEMATICS",
+      "level": 13,
+      "variant": 2,
+      "type": "DETERMINANTS",
+      "statement": "Para que valores de a é que det [[a, 2], [8, a]] = 0?",
+      "options": [
+        {
+          "id": "A",
+          "text": "apenas a = 4"
+        },
+        {
+          "id": "B",
+          "text": "a = 2 ou a = −2"
+        },
+        {
+          "id": "C",
+          "text": "a = 8 ou a = −8"
+        },
+        {
+          "id": "D",
+          "text": "a = 4 ou a = −4"
+        }
+      ],
+      "correctOption": "D",
+      "explanation": "det = a² − 16 = 0, logo a = 4 ou a = −4. Erros típicos: esquecer a raiz negativa, tirar a raiz de 2 ou de 8 em vez de 16."
+    },
+    {
+      "id": "mathematics-l14-v01",
+      "competency": "MATHEMATICS",
+      "level": 14,
+      "variant": 1,
+      "type": "EIGENVALUES",
+      "statement": "Quais são os valores próprios da matriz A = [[4, 1], [2, 3]]?",
+      "options": [
+        {
+          "id": "A",
+          "text": "λ = 2 e λ = 5"
+        },
+        {
+          "id": "B",
+          "text": "λ = 3 e λ = 4"
+        },
+        {
+          "id": "C",
+          "text": "λ = −2 e λ = −5"
+        },
+        {
+          "id": "D",
+          "text": "λ = 1 e λ = 10"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "A equação característica é λ² − 7λ + 10 = 0 (traço 7, determinante 10), logo λ = 2 ou λ = 5. Erros típicos: ler os elementos da diagonal (3 e 4), trocar os sinais (−2, −5) ou errar o produto (1 e 10)."
+    },
+    {
+      "id": "mathematics-l14-v02",
+      "competency": "MATHEMATICS",
+      "level": 14,
+      "variant": 2,
+      "type": "EIGENVALUES",
+      "statement": "Quais são os valores próprios da matriz A = [[5, 2], [2, 2]]?",
+      "options": [
+        {
+          "id": "A",
+          "text": "λ = 2 e λ = 5"
+        },
+        {
+          "id": "B",
+          "text": "λ = −1 e λ = −6"
+        },
+        {
+          "id": "C",
+          "text": "λ = 1 e λ = 6"
+        },
+        {
+          "id": "D",
+          "text": "λ = 3 e λ = 4"
+        }
+      ],
+      "correctOption": "C",
+      "explanation": "A equação característica é λ² − 7λ + 6 = 0 (traço 7, determinante 6), logo λ = 1 ou λ = 6. Erros típicos: ler a diagonal (2 e 5), trocar os sinais (−1, −6) ou usar soma certa e produto errado (3 e 4)."
+    },
+    {
+      "id": "mathematics-l15-v01",
+      "competency": "MATHEMATICS",
+      "level": 15,
+      "variant": 1,
+      "type": "EIGENVALUES",
+      "statement": "Qual é um vetor próprio de A = [[2, 1], [1, 2]] associado ao valor próprio λ = 3?",
+      "options": [
+        {
+          "id": "A",
+          "text": "(1, −1)"
+        },
+        {
+          "id": "B",
+          "text": "(1, 1)"
+        },
+        {
+          "id": "C",
+          "text": "(2, 1)"
+        },
+        {
+          "id": "D",
+          "text": "(1, 3)"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "(A − 3I)v = 0 dá −x + y = 0, logo y = x e v = (1, 1). Verificação: A·(1, 1) = (3, 3) = 3·(1, 1). O vetor (1, −1) corresponde a λ = 1."
+    },
+    {
+      "id": "mathematics-l15-v02",
+      "competency": "MATHEMATICS",
+      "level": 15,
+      "variant": 2,
+      "type": "EIGENVALUES",
+      "statement": "Qual é um vetor próprio de A = [[3, 1], [0, 2]] associado ao valor próprio λ = 2?",
+      "options": [
+        {
+          "id": "A",
+          "text": "(1, 1)"
+        },
+        {
+          "id": "B",
+          "text": "(1, 0)"
+        },
+        {
+          "id": "C",
+          "text": "(0, 1)"
+        },
+        {
+          "id": "D",
+          "text": "(1, −1)"
+        }
+      ],
+      "correctOption": "D",
+      "explanation": "(A − 2I)v = 0 dá x + y = 0, logo v = (1, −1). Verificação: A·(1, −1) = (2, −2) = 2·(1, −1). O vetor (1, 0) corresponde a λ = 3."
+    },
+    {
+      "id": "mathematics-l16-v01",
+      "competency": "MATHEMATICS",
+      "level": 16,
+      "variant": 1,
+      "type": "LIMITS",
+      "statement": "Calcule lim (x→0) sin(3x)/x.",
+      "options": [
+        {
+          "id": "A",
+          "text": "3"
+        },
+        {
+          "id": "B",
+          "text": "1"
+        },
+        {
+          "id": "C",
+          "text": "1/3"
+        },
+        {
+          "id": "D",
+          "text": "0"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "sin(3x)/x = 3·sin(3x)/(3x) → 3·1 = 3. Erros típicos: responder 1 (esquecer o fator 3), 1/3 (dividir em vez de multiplicar) ou 0."
+    },
+    {
+      "id": "mathematics-l16-v02",
+      "competency": "MATHEMATICS",
+      "level": 16,
+      "variant": 2,
+      "type": "LIMITS",
+      "statement": "Calcule lim (x→+∞) (1 + 2/x)ˣ.",
+      "options": [
+        {
+          "id": "A",
+          "text": "e"
+        },
+        {
+          "id": "B",
+          "text": "2"
+        },
+        {
+          "id": "C",
+          "text": "e²"
+        },
+        {
+          "id": "D",
+          "text": "1"
+        }
+      ],
+      "correctOption": "C",
+      "explanation": "Com t = x/2: (1 + 1/t)^(2t) → e². Erros típicos: responder e (esquecer o 2), 2 ou 1 (tratar 1 + 2/x → 1 e 1^∞ = 1)."
+    },
+    {
+      "id": "mathematics-l17-v01",
+      "competency": "MATHEMATICS",
+      "level": 17,
+      "variant": 1,
+      "type": "SERIES",
+      "statement": "Qual é a soma da série Σ (n = 0 até ∞) (1/3)ⁿ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "3"
+        },
+        {
+          "id": "B",
+          "text": "3/2"
+        },
+        {
+          "id": "C",
+          "text": "2/3"
+        },
+        {
+          "id": "D",
+          "text": "1/2"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "Série geométrica de razão 1/3 e primeiro termo 1: soma = 1/(1 − 1/3) = 3/2. Erros típicos: 3 (dividir pela razão), 2/3 (calcular 1 − r) ou 1/2."
+    },
+    {
+      "id": "mathematics-l17-v02",
+      "competency": "MATHEMATICS",
+      "level": 17,
+      "variant": 2,
+      "type": "SERIES",
+      "statement": "Qual é a soma da série Σ (n = 1 até ∞) 2/3ⁿ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "3"
+        },
+        {
+          "id": "B",
+          "text": "2"
+        },
+        {
+          "id": "C",
+          "text": "2/3"
+        },
+        {
+          "id": "D",
+          "text": "1"
+        }
+      ],
+      "correctOption": "D",
+      "explanation": "Primeiro termo 2/3, razão 1/3: soma = (2/3)/(1 − 1/3) = 1. Erros típicos: começar em n = 0 (soma 3), esquecer a divisão (2) ou calcular 1 − r (2/3)."
+    },
+    {
+      "id": "mathematics-l18-v01",
+      "competency": "MATHEMATICS",
+      "level": 18,
+      "variant": 1,
+      "type": "LIMITS",
+      "statement": "Calcule lim (x→0) (eˣ − 1 − x)/x².",
+      "options": [
+        {
+          "id": "A",
+          "text": "1/2"
+        },
+        {
+          "id": "B",
+          "text": "1"
+        },
+        {
+          "id": "C",
+          "text": "0"
+        },
+        {
+          "id": "D",
+          "text": "2"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "Com eˣ = 1 + x + x²/2 + …, o numerador é x²/2 + …, logo o limite é 1/2 (ou duas aplicações da regra de L'Hôpital). Erros típicos: 1 (parar em 1 + x), 0 ou 2."
+    },
+    {
+      "id": "mathematics-l18-v02",
+      "competency": "MATHEMATICS",
+      "level": 18,
+      "variant": 2,
+      "type": "LIMITS",
+      "statement": "Calcule lim (x→0) (x − sin x)/x³.",
+      "options": [
+        {
+          "id": "A",
+          "text": "1/2"
+        },
+        {
+          "id": "B",
+          "text": "1/3"
+        },
+        {
+          "id": "C",
+          "text": "1/6"
+        },
+        {
+          "id": "D",
+          "text": "0"
+        }
+      ],
+      "correctOption": "C",
+      "explanation": "Com sin x = x − x³/6 + …, o numerador é x³/6 + …, logo o limite é 1/6 (ou três aplicações de L'Hôpital). Erros típicos: 1/2, 1/3 ou 0."
+    },
+    {
+      "id": "mathematics-l19-v01",
+      "competency": "MATHEMATICS",
+      "level": 19,
+      "variant": 1,
+      "type": "MATRICES",
+      "statement": "Qual é o determinante de A = [[1, 2, 0], [0, 1, 3], [2, 0, 1]]?",
+      "options": [
+        {
+          "id": "A",
+          "text": "−11"
+        },
+        {
+          "id": "B",
+          "text": "13"
+        },
+        {
+          "id": "C",
+          "text": "1"
+        },
+        {
+          "id": "D",
+          "text": "6"
+        }
+      ],
+      "correctOption": "B",
+      "explanation": "Expandindo pela 1.ª linha: 1·(1·1 − 3·0) − 2·(0·1 − 3·2) + 0 = 1 + 12 = 13. Erros típicos: trocar o sinal do cofator do meio (1 − 12 = −11), usar só a diagonal (1) ou esquecer termos."
+    },
+    {
+      "id": "mathematics-l19-v02",
+      "competency": "MATHEMATICS",
+      "level": 19,
+      "variant": 2,
+      "type": "MATRICES",
+      "statement": "Seja A = [[1, 2, 0], [0, 1, 0], [0, 0, 3]]. Qual é o elemento da 1.ª linha e 2.ª coluna de A⁻¹?",
+      "options": [
+        {
+          "id": "A",
+          "text": "2"
+        },
+        {
+          "id": "B",
+          "text": "−1/2"
+        },
+        {
+          "id": "C",
+          "text": "1/2"
+        },
+        {
+          "id": "D",
+          "text": "−2"
+        }
+      ],
+      "correctOption": "D",
+      "explanation": "O bloco [[1, 2], [0, 1]] tem inversa [[1, −2], [0, 1]] e o elemento 3 passa a 1/3. Logo (A⁻¹)₁₂ = −2. Erros típicos: esquecer de trocar o sinal (2) ou inverter o elemento (±1/2)."
+    },
+    {
+      "id": "mathematics-l20-v01",
+      "competency": "MATHEMATICS",
+      "level": 20,
+      "variant": 1,
+      "type": "SERIES",
+      "statement": "Qual é a soma da série Σ (n = 1 até ∞) 1/(n(n + 1))?",
+      "options": [
+        {
+          "id": "A",
+          "text": "1"
+        },
+        {
+          "id": "B",
+          "text": "1/2"
+        },
+        {
+          "id": "C",
+          "text": "2"
+        },
+        {
+          "id": "D",
+          "text": "A série diverge"
+        }
+      ],
+      "correctOption": "A",
+      "explanation": "1/(n(n + 1)) = 1/n − 1/(n + 1), a soma telescópica tem soma parcial 1 − 1/(N + 1) → 1. Erros típicos: 1/2 (só o primeiro termo), 2 ou dizer que diverge (confundir com a série harmónica)."
+    },
+    {
+      "id": "mathematics-l20-v02",
+      "competency": "MATHEMATICS",
+      "level": 20,
+      "variant": 2,
+      "type": "MATRICES",
+      "statement": "Qual é o maior valor próprio de A = [[2, 1, 0], [1, 2, 1], [0, 1, 2]]?",
+      "options": [
+        {
+          "id": "A",
+          "text": "3"
+        },
+        {
+          "id": "B",
+          "text": "4"
+        },
+        {
+          "id": "C",
+          "text": "2 + √2"
+        },
+        {
+          "id": "D",
+          "text": "2√2"
+        }
+      ],
+      "correctOption": "C",
+      "explanation": "det(A − λI) = (2 − λ)[(2 − λ)² − 2] = 0, logo λ = 2 ou λ = 2 ± √2. O maior é 2 + √2. Erros típicos: 3 e 4 (valores plausíveis mas que não anulam o determinante) e 2√2 (resolver só (2 − λ)² = 2 e esquecer o 2)."
+    }
+  ]
+}
