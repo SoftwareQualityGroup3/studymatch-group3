@@ -14,6 +14,8 @@ import pt.studymatch.exception.CourseUnitNotFoundException;
 import pt.studymatch.exception.DuplicateAcademicRecordException;
 import pt.studymatch.exception.DuplicateStudentNumberException;
 import pt.studymatch.exception.StudentNotFoundException;
+import pt.studymatch.exception.DuplicateGroupingContextNameException;
+import pt.studymatch.exception.GroupingContextNotFoundException;
 
 /**
  * Trata as exceções da aplicação e transforma-as
@@ -115,6 +117,24 @@ public class GlobalExceptionHandler {
             .badRequest()
             .body(new ApiErrorResponse(
                 Map.of("general", exception.getMessage())
+            ));
+    }
+
+    @ExceptionHandler(GroupingContextNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleGroupingContextNotFound(GroupingContextNotFoundException exception) {
+        return ResponseEntity
+            .status(HttpStatus.NOT_FOUND)
+            .body(new ApiErrorResponse(
+                Map.of("id", exception.getMessage())
+            ));
+    }
+
+    @ExceptionHandler(DuplicateGroupingContextNameException.class)
+    public ResponseEntity<ApiErrorResponse> handleDuplicateGroupingContextName(DuplicateGroupingContextNameException exception) {
+        return ResponseEntity
+            .status(HttpStatus.CONFLICT)
+            .body(new ApiErrorResponse(
+                Map.of("name", exception.getMessage())
             ));
     }
 }
