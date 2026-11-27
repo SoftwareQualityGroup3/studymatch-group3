@@ -14,6 +14,9 @@ import pt.studymatch.exception.CourseUnitNotFoundException;
 import pt.studymatch.exception.DuplicateAcademicRecordException;
 import pt.studymatch.exception.DuplicateStudentNumberException;
 import pt.studymatch.exception.StudentNotFoundException;
+import pt.studymatch.exception.TestConflictException;
+import pt.studymatch.exception.TestSessionNotFoundException;
+import pt.studymatch.exception.TestUnavailableException;
 
 /**
  * Trata as exceções da aplicação e transforma-as
@@ -113,6 +116,48 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
             .badRequest()
+            .body(new ApiErrorResponse(
+                Map.of("general", exception.getMessage())
+            ));
+    }
+
+    /**
+     * Sessão de teste inexistente -> 404.
+     */
+    @ExceptionHandler(TestSessionNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleTestSessionNotFound(
+        TestSessionNotFoundException exception) {
+
+        return ResponseEntity
+            .status(HttpStatus.NOT_FOUND)
+            .body(new ApiErrorResponse(
+                Map.of("competency", exception.getMessage())
+            ));
+    }
+
+    /**
+     * Item que não é o atual, ou teste já terminado -> 409.
+     */
+    @ExceptionHandler(TestConflictException.class)
+    public ResponseEntity<ApiErrorResponse> handleTestConflict(
+        TestConflictException exception) {
+
+        return ResponseEntity
+            .status(HttpStatus.CONFLICT)
+            .body(new ApiErrorResponse(
+                Map.of("general", exception.getMessage())
+            ));
+    }
+
+    /**
+     * Teste indisponível (sem banco ou sem execução de código) -> 503.
+     */
+    @ExceptionHandler(TestUnavailableException.class)
+    public ResponseEntity<ApiErrorResponse> handleTestUnavailable(
+        TestUnavailableException exception) {
+
+        return ResponseEntity
+            .status(HttpStatus.SERVICE_UNAVAILABLE)
             .body(new ApiErrorResponse(
                 Map.of("general", exception.getMessage())
             ));

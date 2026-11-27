@@ -14,6 +14,15 @@ import pt.studymatch.service.SelfAssessmentService;
 
 // controller da autoavaliação do estudante (onboarding / cold start)
 // a autoavaliação pertence a um estudante, por isso o id dele vai no path do url
+
+/**
+ * Autoavaliação de 1 a 5.
+ *
+ * @deprecated substituída pelos testes de nível (LevelTestController, S3-02).
+ *             Continua a funcionar e os dados já guardados não são apagados.
+ */
+// @Deprecated avisa quem usa esta classe de que já não deve contar com ela
+@Deprecated(since = "sprint-3")
 @RestController
 @RequestMapping("/api/students/{studentId}/self-assessment")
 public class SelfAssessmentController {
